@@ -31,5 +31,6 @@ readSequences <- function(infile, accessions) {
     # use matching indexes to read only desired sequences
     subset_index <- fastaindex[wanted_index, ]
     filtered <- readDNAStringSet(subset_index)
-    return(filtered)
 }
+
+print(readSequences(radv_file, wanted))
