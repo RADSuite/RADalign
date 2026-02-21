@@ -1,6 +1,6 @@
 library(Biostrings)
 
-infile <- "C:/Users/rache/OneDrive/Desktop/Capstone/RADalign/data/RADlibV.fa"
+infile <- "C:/Users/rache/OneDrive/Desktop/Capstone/RADalign/inst/extdata/RADlibV.fa"
 
 # vector of desired accession numbers
 wanted <- c("GCF_000006765.1.1")
