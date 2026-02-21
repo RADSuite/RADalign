@@ -40,10 +40,8 @@ mock_accessions_df <- data.frame(
   )
 )
 
-get_accessions <- function() {
-  #file_path <- "~/BYU/BIO465/RADport/data/RADlibV.fa"
+get_accessions_df <- function() {
   file_path <- system.file("extdata", "RADlibV.fa", package = "RADalign")
-  print(file_path)
   lines <- readLines(file_path)
 
   accession_id = c()
@@ -70,4 +68,4 @@ get_accessions <- function() {
   return(accessions)
 }
 
-print(head(get_accessions()))
+#print(head(get_accessions_df()))
