@@ -22,15 +22,23 @@ wanted <- c("GCF_000006765.1.1")
 #' readSequences("/my/file/path", c("1234.1", "1234.2", "1234.3"))
 readSequences <- function(infile, accessions) {
     # create summary dataframe for database file
-    fastaindex <- fasta.index(infile, seqtype = "DNA")
+    fasta_summary <- fasta.index(infile, seqtype = "DNA")
 
     # filter the indexes of the sequences that contain the accession numbers
     # names are stored in the "desc" column of the dataframe
-    wanted_index <- grepl(paste(accessions), fastaindex$desc)
+    matching_indexes <- grepl(paste(accessions, collapse = "|"), fasta_summary$desc)
 
     # use matching indexes to read only desired sequences
-    subset_index <- fastaindex[wanted_index, ]
-    filtered <- readDNAStringSet(subset_index)
+    subset_index <- fasta_summary[matching_indexes, ]
+    readDNAStringSet(subset_index)
 }
 
-print(readSequences(radv_file, wanted))
+filtered <- readSequences(radv_file, wanted)
+
+getVRegions <- function(sequences, vregions) {
+    sequences[grepl(paste(vregions, collapse = "|"), names(sequences))]
+}
+
+wanted <- c("V1", "V2")
+filtered_vregions <- getVRegions(filtered, wanted)
+print(filtered_vregions)
