@@ -55,9 +55,9 @@ get_accessions <- function() {
     if ((length(copy_id) > 0) && !(copy_id %in% accession_id)) {
       reg_pattern = "[^\\.]*\\.[^\\.]*"
       reg_id = regmatches(copy_id, regexpr(reg_pattern, copy_id))
-      print(reg_id)
+
       name = mock_accessions_df$species[mock_accessions_df$accession == reg_id]
-      print(name)
+
       accession_id <- c(accession_id, copy_id)
       species_name <- c(species_name, name)
     }
@@ -68,5 +68,4 @@ get_accessions <- function() {
   return(accessions)
 }
 
-#acc = get_accessions()
-#print(head(acc))
+#print(head(get_accessions()))
