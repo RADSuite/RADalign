@@ -1,18 +1,15 @@
-#' Main function of RADport
+#' download_RADsynch
 #'
-#' This function allows users to download files for integration with analysis pipelines, currently supporting MetaScope and Kraken.
+#' This function allows users to download files for integration with analysis pipelines, currently supports MetaScope and Kraken.
 #'
 #' @param pipeline name of pipeline. Valid inputs: ("MetaScope", "Kraken")
-#' @param species_list list of species names to download from RADlib
+#' @param species_list list of species names to download from RADlib.
 #'
 #' @return This function downloads a zipped folder to the user's working directory, and outputs the location of the downloaded folder.
-#'
-#' @keywords keywords
 #'
 #' @export
 #'
 #' @examples
-#' ## easy
 #' download_RADsynch("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
 #' > "Downloaded Successfully to: ~/user/Downloads"
 
