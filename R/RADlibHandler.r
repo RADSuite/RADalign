@@ -1,9 +1,6 @@
 library(Biostrings)
 
-radv_file <- "C:/Users/rache/OneDrive/Desktop/Capstone/RADalign/inst/extdata/RADlibV.fa"
 
-# vector of desired accession numbers
-wanted <- c("GCF_000006765.1.1")
 
 #' readSequences
 #'
@@ -33,12 +30,30 @@ readSequences <- function(infile, accessions) {
     readDNAStringSet(subset_index)
 }
 
-filtered <- readSequences(radv_file, wanted)
-
+#' getVRegions
+#'
+#' Given a DNAStringSet of sequences with V-regions included in their names,
+#' retrieve all instances of selected V-regions from the DNAStringSet.
+#'
+#' @param sequences a DNAStringSet of sequences to search
+#' @param vregions a list of v-regions to search for in the DNAStringSet
+#'
+#' @return a subset of the input DNAStringSet containing all sequences from
+#' specificed v-regions.
+#'
+#' @export
+#'
+#' @examples
+#' ## getVRegions(my_string_set, c("V1", "V2"))
 getVRegions <- function(sequences, vregions) {
     sequences[grepl(paste(vregions, collapse = "|"), names(sequences))]
 }
 
+
+# testing scratch
+radv_file <- "C:/Users/rache/OneDrive/Desktop/Capstone/RADalign/inst/extdata/RADlibV.fa"
+wanted <- c("GCF_000006765.1.1")
+filtered <- readSequences(radv_file, wanted)
 wanted <- c("V1", "V2")
 filtered_vregions <- getVRegions(filtered, wanted)
 print(filtered_vregions)
