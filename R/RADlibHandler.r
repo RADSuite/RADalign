@@ -49,9 +49,10 @@ getVRegions <- function(sequences, vregions) {
 
 
 # testing scratch
-radv_file <- "C:/Users/rache/OneDrive/Desktop/Capstone/RADalign/inst/extdata/RADlibV.fa"
-wanted <- c("GCF_000006765.1.1")
-filtered <- readSequences(radv_file, wanted)
-wanted <- c("V1", "V2")
-filtered_vregions <- getVRegions(filtered, wanted)
-print(filtered_vregions)
+
+#radv_file <- "C:/Users/rache/OneDrive/Desktop/Capstone/RADalign/inst/extdata/RADlibV.fa"
+#wanted <- c("GCF_000006765.1.1")
+#filtered <- readSequences(radv_file, wanted)
+#wanted <- c("V1", "V2")
+#filtered_vregions <- getVRegions(filtered, wanted)
+#print(filtered_vregions)
