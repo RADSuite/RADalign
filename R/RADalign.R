@@ -32,6 +32,10 @@ alignVRegions <- function(sequences) {
         # == 0 to create matrix of unique sequences. Sean used Phangorn in heat
         # map; should probably read through Phangorn in greater detail to
         # potentially use it here.
+
+        # possible code for msa to phangorn:
+        # phy <- phyDat(as.matrix(alignment), type = "DNA")
+        # might need to convert alignment to DNAStringSet first
     }
 }
 
