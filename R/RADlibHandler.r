@@ -1,7 +1,5 @@
 library(Biostrings)
 
-
-
 #' readSequences
 #'
 #' Read in all sequences that include the given accession numbers in their
