@@ -17,8 +17,8 @@ selectTaxa <- function(taxa) {
 #'
 #' @param sequences a DNAStringSet of sequences to align
 #'
-#' @return a dataframe containing information about which sequences
-#' align exactly
+#' @return a list containing unique IDs for each group of exactly
+#' aligned sequences in each v-region
 #'
 #' @export
 #'
@@ -53,7 +53,7 @@ selectVRegions <- function() {
 
 # note: remember to always comment out scratch code you're using for tests
 # so the package will load correctly!
-alignVRegions(sequences)
+# alignVRegions(sequences)
 
 
 # This is still useful code, but a full distance calculation is more than
