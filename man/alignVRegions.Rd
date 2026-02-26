@@ -10,8 +10,8 @@ alignVRegions(sequences)
 \item{sequences}{a DNAStringSet of sequences to align}
 }
 \value{
-a dataframe containing information about which sequences
-align exactly
+a list containing unique IDs for each group of exactly
+aligned sequences in each v-region
 }
 \description{
 For a group of sequences in RADlib, align the sequences in each
