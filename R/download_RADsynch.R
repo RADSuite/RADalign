@@ -14,7 +14,7 @@
 #' > "Downloaded Successfully to: ~/user/Downloads"
 
 
-download_RADsynch <- function(pipeline, species_list) {
+download_RADsynch <- function(pipeline, species_list, download_location = getwd()) {
 
   accessions_list <- get_accession_ids(species_list)
   file_paths <- c()
@@ -42,14 +42,20 @@ get_MetaScope_reference <- function(accessions_list) {
   #use RADlib readSequences function to return select sequences from RADlib
   sequences <- readSequences(RADlib_path, accessions_list)
 
+  print(head(sequences))
+
   #create temp fasta file for downloadable reference database
-  temp_fasta <- tempfile(pattern = "reference_", fileext = ".fasta")
+  temp_fasta <- tempfile(pattern = "reference_", tmpdir = getwd(), fileext = ".fasta")
   #dir.create(temp_fasta)
 
   #write filtered sequence data to temp file
   writeXStringSet(sequences, temp_fasta)
 
+<<<<<<< HEAD
+  #print(readLines("temp_fasta", n = 5))
+=======
   print(readLines(temp_fasta, n = 5))
+>>>>>>> 6091187a03bb4b4eb04a28b369687bc17e787e29
 
   #output file path to temp file
   return (temp_fasta)
