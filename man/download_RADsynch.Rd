@@ -4,7 +4,7 @@
 \alias{download_RADsynch}
 \title{download_RADsynch}
 \usage{
-download_RADsynch(pipeline, species_list)
+download_RADsynch(pipeline, species_list, download_location = getwd())
 }
 \arguments{
 \item{pipeline}{name of pipeline. Valid inputs: ("MetaScope", "Kraken")}
