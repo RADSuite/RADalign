@@ -51,7 +51,11 @@ get_MetaScope_reference <- function(accessions_list) {
   #write filtered sequence data to temp file
   writeXStringSet(sequences, temp_fasta)
 
+<<<<<<< HEAD
   #print(readLines("temp_fasta", n = 5))
+=======
+  print(readLines(temp_fasta, n = 5))
+>>>>>>> 6091187a03bb4b4eb04a28b369687bc17e787e29
 
   #output file path to temp file
   return (temp_fasta)

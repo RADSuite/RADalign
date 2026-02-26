@@ -1,4 +1,7 @@
-#' library(Biostrings)
+
+library(Biostrings)
+
+#' readSequences
 #'
 #'
 #'
@@ -52,9 +55,20 @@
 #'
 #' # testing scratch
 #'
-#' #radv_file <- "C:/Users/rache/OneDrive/Desktop/Capstone/RADalign/inst/extdata/RADlibV.fa"
-#' #wanted <- c("GCF_000006765.1.1")
-#' #filtered <- readSequences(radv_file, wanted)
-#' #wanted <- c("V1", "V2")
-#' #filtered_vregions <- getVRegions(filtered, wanted)
-#' #print(filtered_vregions)
+#' @export
+#'
+#' @examples
+#' ## getVRegions(my_string_set, c("V1", "V2"))
+getVRegions <- function(sequences, vregions) {
+    sequences[grepl(paste(vregions, collapse = "|"), names(sequences))]
+}
+
+
+# testing scratch
+
+# radv_file <- "C:/Users/rache/OneDrive/Desktop/Capstone/RADalign/inst/extdata/RADlibV.fa"
+# wanted <- c("GCF_000006765.1.1")
+# filtered <- readSequences(radv_file, wanted)
+# wanted <- c("V1", "V2")
+# filtered_vregions <- getVRegions(filtered, wanted)
+# print(filtered_vregions)
