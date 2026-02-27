@@ -1,9 +1,10 @@
-#' download_RADsynch
+#' download_RAD
 #'
 #' This function allows users to download files for integration with analysis pipelines, currently supports MetaScope and Kraken.
 #'
 #' @param pipeline name of pipeline. Valid inputs: ("MetaScope", "Kraken")
 #' @param species_list list of species names to download from RADlib.
+#' @param download_location optional parameter, file path for where downloaded files should go, defaults to working directory
 #'
 #' @return This function downloads a zipped folder to the user's working directory, and outputs the location of the downloaded folder.
 #'
@@ -13,7 +14,7 @@
 #' download_RADsynch("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
 #' > "Downloaded Successfully to: ~/user/Downloads"
 
-download_RADsynch <- function(pipeline, species_list, download_location = getwd()) {
+download_RAD_data <- function(pipeline, species_list, download_location = getwd()) {
 
   accessions_list <- get_accession_ids(species_list)
 
@@ -22,13 +23,15 @@ download_RADsynch <- function(pipeline, species_list, download_location = getwd(
     dir.create(download_folder, recursive = TRUE)
   }
 
-  #file_paths <- c()
+  file_paths <- c()
 
   if (pipeline == "MetaScope") {
     #accessions_SQLite_tmp_path <- get_MetaScope_accessions(accessions_list)
     # reference_fasta_tmp_path <- download_MetaScope_reference(accessions_list, download_location)
 
-    download_MetaScope_reference(accessions_list, download_location)
+    reference_file_name <- download_MetaScope_reference(accessions_list, download_location)
+
+    file_paths <- c(reference_file_name)
 
   } else if (pipeline == "Kraken") {
     # download_Kraken_files(accessions_list)
@@ -53,12 +56,19 @@ download_MetaScope_reference <- function(accessions_list, download_folder) {
   #use Biostrings to write fasta data for selected sequences to file
   writeXStringSet(sequences, file_path)
 
+  # if(file.info(file_path)$size > 0) {
+  #   return (paste0("Download successful: ", file_name))
+  # } else {
+  #   return ("Error writing file to ")
+  # }
+
   return (paste0("Download successful: ", file_name))
+
 }
 
 # acc_list <- c("GCF_000006765.1.1", "GCF_000006765.1.2", "GCF_000006765.1.3", "GCF_000006765.1.4", "GCF_000007505.1.1", "GCF_000007505.1.2", "GCF_000007505.1.3")
 #
 # print(get_MetaScope_reference(acc_list, "/Users/myeshagilliland/BYU/BIO465/RADalign"))
 #
-# print(download_RADsynch("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis")))
+# print(download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis")))
 
