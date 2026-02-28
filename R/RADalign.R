@@ -48,28 +48,39 @@ alignVRegions <- function(sequences) {
 }
 
 createCSV <- function(IDs) {
-    full_summary <- data.frame(
-        species = list(), variable_region = list(),
-        copy_num = list(), seq_id = list()
-    )
-    # need species = species name, variable_region = V1,
-    # copy_num = 1, seq_id = your id
-
+    species_vec <- character()
+    region_vec <- character()
+    copy_num_vec <- character()
+    seq_id_vec <- character()
     for (i in seq_along(IDs)) {
         group <- IDs[i]
         id <- names(group)
         region <- substr(id, start = 1, stop = 2)
 
         seq_list <- IDs[[i]]
+        accessions_df <- get_accessions_df()
         for (j in seq_along(seq_list)) {
             copy_n <- sub("^[^.]*\\.[^.]*\\.([^_]*).*", "\\1", seq_list[j])
-            species <- getSpeciesName(seq_list[j])
+            accession_num <- sub("^(([^_]*_){1}[^_]*)_.*", "\\1", seq_list[j])
+            species <- accessions_df$species_name[accessions_df$accession_id == accession_num]
+
+            species_vec <- c(species_vec, species)
+            region_vec <- c(region_vec, region)
+            copy_num_vec <- c(copy_num_vec, copy_n)
+            seq_id_vec <- c(seq_id_vec, id)
         }
     }
+
+    full_summary <- data.frame(
+        species = species_vec, variable_region = region_vec,
+        copy_num = copy_num_vec, seq_id = seq_id_vec
+    )
+    print(full_summary)
+
+    write.csv(full_summary, "C:/Users/rache/OneDrive/Desktop/Capstone/RADalign/inst/extdata/RADq.csv", )
 }
 
-getSpeciesName <- function(seq_id) {
-    df <- get_accessions_df()
+getSpeciesName <- function(seq_id, accessions_df) {
     print("hurray!")
 }
 
