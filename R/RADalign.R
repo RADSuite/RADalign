@@ -62,10 +62,15 @@ createCSV <- function(IDs) {
 
         seq_list <- IDs[[i]]
         for (j in seq_along(seq_list)) {
-            copy_num <- sub("^([^\\.]*\\.[^\\.]*)\\.([^_]*)$", "\\2", seq_list[j])
-            print(copy_num)
+            copy_n <- sub("^[^.]*\\.[^.]*\\.([^_]*).*", "\\1", seq_list[j])
+            species <- getSpeciesName(seq_list[j])
         }
     }
+}
+
+getSpeciesName <- function(seq_id) {
+    df <- get_accessions_df()
+    print("hurray!")
 }
 
 selectVRegions <- function() {
