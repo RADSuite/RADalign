@@ -61,15 +61,16 @@ createCSV <- function(IDs) {
         region <- substr(id, start = 1, stop = 2)
 
         seq_list <- IDs[[i]]
+        accessions_df <- get_accessions_df()
         for (j in seq_along(seq_list)) {
             copy_n <- sub("^[^.]*\\.[^.]*\\.([^_]*).*", "\\1", seq_list[j])
-            species <- getSpeciesName(seq_list[j])
+            accession_num <- sub("^(([^_]*_){1}[^_]*)_.*", "\\1", seq_list[j])
+            species <- accessions_df$species_name[accessions_df$accession_id == accession_num]
         }
     }
 }
 
-getSpeciesName <- function(seq_id) {
-    df <- get_accessions_df()
+getSpeciesName <- function(seq_id, accessions_df) {
     print("hurray!")
 }
 
@@ -79,8 +80,8 @@ selectVRegions <- function() {
 
 # note: remember to always comment out scratch code you're using for tests
 # so the package will load correctly!
-# IDs <- alignVRegions(sequences)
-# createCSV(IDs)
+IDs <- alignVRegions(sequences)
+createCSV(IDs)
 
 
 # This is still useful code, but a full distance calculation is more than
