@@ -89,8 +89,8 @@ selectVRegions <- function() {
 
 # note: remember to always comment out scratch code you're using for tests
 # so the package will load correctly!
-IDs <- alignVRegions(sequences)
-createCSV(IDs)
+# IDs <- alignVRegions(sequences)
+# createCSV(IDs)
 
 
 # This is still useful code, but a full distance calculation is more than
