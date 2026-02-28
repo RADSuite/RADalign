@@ -63,18 +63,19 @@ createCSV <- function(IDs) {
             copy_n <- sub("^[^.]*\\.[^.]*\\.([^_]*).*", "\\1", seq_list[j])
             accession_num <- sub("^(([^_]*_){1}[^_]*)_.*", "\\1", seq_list[j])
             species <- accessions_df$species_name[accessions_df$accession_id == accession_num]
-        }
 
-        species_vec <- c(species_vec, species)
-        region_vec <- c(region_vec, region)
-        copy_num_vec <- c(copy_num_vec, copy_n)
-        seq_id_vec <- c(seq_id_vec, id)
+            species_vec <- c(species_vec, species)
+            region_vec <- c(region_vec, region)
+            copy_num_vec <- c(copy_num_vec, copy_n)
+            seq_id_vec <- c(seq_id_vec, id)
+        }
     }
 
     full_summary <- data.frame(
         species = species_vec, variable_region = region_vec,
         copy_num = copy_num_vec, seq_id = seq_id_vec
     )
+    print(full_summary)
 
     write.csv(full_summary, "C:/Users/rache/OneDrive/Desktop/Capstone/RADalign/inst/extdata/RADq.csv", )
 }
