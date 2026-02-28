@@ -66,6 +66,16 @@ download_MetaScope_reference <- function(accessions_list, download_folder) {
 
 }
 
+# download_MetaScope_accessions <- function(accessions_list, download_folder) {
+#   #
+#   temp_accessions <- filter_accessions_SQLite(accessions_list)
+#
+#
+# }
+
+
+
+
 # acc_list <- c("GCF_000006765.1.1", "GCF_000006765.1.2", "GCF_000006765.1.3", "GCF_000006765.1.4", "GCF_000007505.1.1", "GCF_000007505.1.2", "GCF_000007505.1.3")
 #
 # print(get_MetaScope_reference(acc_list, "/Users/myeshagilliland/BYU/BIO465/RADalign"))
