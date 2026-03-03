@@ -7,7 +7,9 @@ data_dir <- tools::R_user_dir("RADalign", which = "data")
 if (!dir.exists(data_dir)) dir.create(data_dir, recursive = TRUE)
 
 getSequences <- function(taxa) {
-    print("selecting taxa")
+    accessions <- get_accession_ids(taxa)
+    RADlibV <- system.file("extdata", "RADlibV.fa", package = "RADalign")
+    sequences <- readSequences(RADlibV, accessions)
 }
 
 #' alignVRegions
@@ -27,6 +29,8 @@ getSequences <- function(taxa) {
 #' alignVRegions(sequences)
 alignVRegions <- function(sequences) {
     IDs <- list()
+    all_v_regions <- c("V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9")
+
     for (region in all_v_regions) {
         # get all sequences for region and perform msa
         region_sequences <- getVRegions(sequences, region)
@@ -85,7 +89,7 @@ createSummary <- function(IDs, return_df = FALSE) {
     }
 }
 
-selectVRegions <- function(vregions) {
+selectVRegions <- function(vregions, return_df = FALSE) {
     infile <- file.path(data_dir, "RADq.csv")
     if (!file.exists(infile)) {
         print("RADq.csv not yet created")
@@ -94,16 +98,19 @@ selectVRegions <- function(vregions) {
     filtered <- full_summary[full_summary$variable_region %in% vregions, ]
     outfile <- file.path(data_dir, "RADq_filtered.csv")
     write.csv(filtered, outfile)
+    if (return_df) {
+        return(filtered)
+    }
 }
 
 # note: remember to always comment out scratch code you're using for tests
 # so the package will load correctly!
-# RADlibV <- system.file("extdata", "RADlibV.fa", package = "RADalign")
-# all_v_regions <- c("V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9")
-# sequences <- readSequences(RADlibV, c("GCF_000006765.1"))
-# IDs <- alignVRegions(sequences)
-# createSummary(IDs)
-# selectVRegions(c("V1", "V5"))
+
+sequences <- getSequences(c("Pseudomonas aeruginosa"))
+print(sequences)
+IDs <- alignVRegions(sequences)
+createSummary(IDs)
+selectVRegions(c("V1", "V5"))
 
 # This is still useful code, but a full distance calculation is more than
 # we need for now. I'm leaving this in here in case my implementation proves
