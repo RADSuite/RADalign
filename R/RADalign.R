@@ -2,12 +2,14 @@ library(Biostrings)
 library(msa)
 library(phangorn)
 
-RADlibV <-
-    "C:/Users/rache/OneDrive/Desktop/Capstone/RADalign/inst/extdata/RADlibV.fa"
-all_v_regions <- c("V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9")
+# create the user data directory if it doesn't already exist
+data_dir <- tools::R_user_dir("RADalign", which = "data")
+if (!dir.exists(data_dir)) dir.create(data_dir, recursive = TRUE)
 
-selectTaxa <- function(taxa) {
-    print("selecting taxa")
+getSequences <- function(taxa) {
+    accessions <- get_accession_ids(taxa)
+    RADlibV <- system.file("extdata", "RADlibV.fa", package = "RADalign")
+    sequences <- readSequences(RADlibV, accessions)
 }
 
 #' alignVRegions
@@ -26,9 +28,9 @@ selectTaxa <- function(taxa) {
 #' ## TODO::still in progress
 #' alignVRegions(sequences)
 alignVRegions <- function(sequences) {
-    sequences <- readSequences(RADlibV, c("GCF_000006765.1"))
-
     IDs <- list()
+    all_v_regions <- c("V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9")
+
     for (region in all_v_regions) {
         # get all sequences for region and perform msa
         region_sequences <- getVRegions(sequences, region)
@@ -47,7 +49,8 @@ alignVRegions <- function(sequences) {
     return(IDs)
 }
 
-createCSV <- function(IDs) {
+createSummary <- function(IDs, return_df = FALSE) {
+    # use vectors to retrieve and sort individual pieces of information from ID list
     species_vec <- character()
     region_vec <- character()
     copy_num_vec <- character()
@@ -71,28 +74,43 @@ createCSV <- function(IDs) {
         }
     }
 
+    # create dataframe using sorted information
     full_summary <- data.frame(
         species = species_vec, variable_region = region_vec,
         copy_num = copy_num_vec, seq_id = seq_id_vec
     )
-    print(full_summary)
 
-    write.csv(full_summary, "C:/Users/rache/OneDrive/Desktop/Capstone/RADalign/inst/extdata/RADq.csv", )
+    # create csv from dataframe
+    filepath <- file.path(data_dir, "RADq.csv")
+    write.csv(full_summary, filepath)
+
+    if (return_df) {
+        return(full_summary)
+    }
 }
 
-getSpeciesName <- function(seq_id, accessions_df) {
-    print("hurray!")
-}
-
-selectVRegions <- function() {
-    print("selecting v-regions")
+selectVRegions <- function(vregions, return_df = FALSE) {
+    infile <- file.path(data_dir, "RADq.csv")
+    if (!file.exists(infile)) {
+        print("RADq.csv not yet created")
+    }
+    full_summary <- read.csv(infile)
+    filtered <- full_summary[full_summary$variable_region %in% vregions, ]
+    outfile <- file.path(data_dir, "RADq_filtered.csv")
+    write.csv(filtered, outfile)
+    if (return_df) {
+        return(filtered)
+    }
 }
 
 # note: remember to always comment out scratch code you're using for tests
 # so the package will load correctly!
-# IDs <- alignVRegions(sequences)
-# createCSV(IDs)
 
+sequences <- getSequences(c("Pseudomonas aeruginosa"))
+print(sequences)
+IDs <- alignVRegions(sequences)
+createSummary(IDs)
+selectVRegions(c("V1", "V5"))
 
 # This is still useful code, but a full distance calculation is more than
 # we need for now. I'm leaving this in here in case my implementation proves
