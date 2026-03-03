@@ -65,20 +65,56 @@ download_MetaScope_reference <- function(accessions_list, download_folder) {
   return (paste0("Download successful: ", file_name))
 
 }
-
+#
 # download_MetaScope_accessions <- function(accessions_list, download_folder) {
 #   #
-#   temp_accessions <- filter_accessions_SQLite(accessions_list)
+#   # temp_accessions <- filter_accessions_SQLite(accessions_list)
 #
+#   #location of accessions db
+#   db_path <- system.file("extdata", "example_accessions.sql", package = "RADalign")
+#
+#   #open db connection
+#   con <- dbConnect(
+#     RSQLite::SQLite(),
+#     dbname = db_path
+#   )
+#
+#   # dbExecute(con, "ATTACH DATABASE 'destination_subset.sqlite' AS dest_db")
+#
+#   file_name <- "Metascope_accessions_db.sqlite"
+#   file_path <- file.path(download_folder, file_name)
+#
+#   create_db_query <- paste0("ATTACH DATABASE '", file_path, "' AS dest_db")
+#   dbExecute(con, creat_db_query)
+#
+#   placeholders <- paste(rep("?", length(accessions_)))
+#
+#   dbExecute(con, "CREATE TABLE dest_db.accessionTaxa AS SELECT * FROM accessionTaxa WHERE accession = ?", params = accessions_list)
+#
+#   dbExecute(con, "DETACH DATABASE dest_db")
+#   dbDisconnect(con)
+#
+#   return(print("DONE"))
 #
 # }
-
-
-
-
-# acc_list <- c("GCF_000006765.1.1", "GCF_000006765.1.2", "GCF_000006765.1.3", "GCF_000006765.1.4", "GCF_000007505.1.1", "GCF_000007505.1.2", "GCF_000007505.1.3")
 #
-# print(get_MetaScope_reference(acc_list, "/Users/myeshagilliland/BYU/BIO465/RADalign"))
 #
-# print(download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis")))
-
+#
+#
+# # acc_list <- c("GCF_000006765.1.1", "GCF_000006765.1.2", "GCF_000006765.1.3", "GCF_000006765.1.4", "GCF_000007505.1.1", "GCF_000007505.1.2", "GCF_000007505.1.3")
+# #
+# # print(get_MetaScope_reference(acc_list, "/Users/myeshagilliland/BYU/BIO465/RADalign"))
+# #
+# # print(download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis")))
+#
+# # accessions_list <- c("NZ_CTYB01000002.1",
+# #                      "NZ_CTYB01000003.1",
+# #                      "NZ_CTYB01000004.1",
+# #                      "NZ_LAWV01000006.1",
+# #                      "NZ_LAWV01000007.1",
+# #                      "NC_009641.1",
+# #                      "NZ_JBBIAE010000011.1",
+# #                      "NZ_JBBIAE010000012.1")
+# accessions_list <- c("NZ_CTYB01000002.1")
+# print(download_MetaScope_accessions(accessions_list, "/Users/myeshagilliland/BYU/BIO465/RADalign"))
+#
