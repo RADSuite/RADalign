@@ -1,3 +1,5 @@
+library(fs)
+
 #' download_RAD
 #'
 #' This function allows users to download files for integration with analysis pipelines, currently supports MetaScope and Kraken.
@@ -13,6 +15,8 @@
 #' @examples
 #' download_RADsynch("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
 #' > "Downloaded Successfully to: ~/user/Downloads"
+
+#download_location = fs::path_home("Downloads")
 
 download_RAD_data <- function(pipeline, species_list, download_location = getwd()) {
 
@@ -65,56 +69,89 @@ download_MetaScope_reference <- function(accessions_list, download_folder) {
   return (paste0("Download successful: ", file_name))
 
 }
+
+library(DBI)
+library(RSQLite)
+
+download_MetaScope_accessions <- function(accessions_list, download_folder) {
+  #
+  # temp_accessions <- filter_accessions_SQLite(accessions_list)
+
+  #location of accessions db
+  db_path <- system.file("extdata", "example_accessions.sql", package = "RADalign")
+
+  #open db connection
+  con <- dbConnect(
+    RSQLite::SQLite(),
+    dbname = db_path
+  )
+
+  #prep file location
+  file_name <- "Metascope_accessions_db.sqlite"
+  file_path <- file.path(download_folder, file_name)
+
+  #create temp database
+  create_db_query <- paste0("ATTACH DATABASE '", file_path, "' AS dest_db;")
+  dbExecute(con, create_db_query)
+
+  #create accessionTaxa table filtered by accessions_list
+  placeholders_acc <- paste(rep("?", length(accessions_list)), collapse = ",")
+  create_table1_query <- paste0("CREATE TABLE dest_db.accessionTaxa AS SELECT *
+                                FROM accessionTaxa
+                                WHERE accession IN (", placeholders_acc, ");")
+  dbExecute(con, create_table1_query, params = accessions_list)
+
+  #get taxa_ids
+  con2 <- dbConnect(
+    RSQLite::SQLite(),
+    dbname = file_path
+  )
+  taxa_ids <- dbGetQuery(con2, "SELECT taxa FROM accessionTaxa;")$taxa
+  # print(taxa_table)
+  # taxa_ids <- taxa_table[taxa]
+  print(taxa_ids)
+  # print(taxa_ids)
+  dbDisconnect(con2)
+
+  #create names table filtered by taxa_ids
+  placeholders_tax <- paste(rep("?", length(taxa_ids)), collapse = ",")
+  create_table2_query <- paste0("CREATE TABLE dest_db.names AS SELECT *
+                                FROM names
+                                WHERE id IN (", placeholders_tax, ");")
+  dbExecute(con, create_table2_query, params = taxa_ids)
+
+  #create nodes table filtered by taxa_ids
+  create_table3_query <- paste0("CREATE TABLE dest_db.nodes AS SELECT *
+                                FROM nodes
+                                WHERE id IN (", placeholders_tax, ");")
+  dbExecute(con, create_table3_query, params = taxa_ids)
+
+  #disconnect
+  dbExecute(con, "DETACH DATABASE dest_db;")
+  dbDisconnect(con)
+
+  return(print("DONE"))
+
+}
+
+
+
+
+# acc_list <- c("GCF_000006765.1.1", "GCF_000006765.1.2", "GCF_000006765.1.3", "GCF_000006765.1.4", "GCF_000007505.1.1", "GCF_000007505.1.2", "GCF_000007505.1.3")
 #
-# download_MetaScope_accessions <- function(accessions_list, download_folder) {
-#   #
-#   # temp_accessions <- filter_accessions_SQLite(accessions_list)
+# print(get_MetaScope_reference(acc_list, "/Users/myeshagilliland/BYU/BIO465/RADalign"))
 #
-#   #location of accessions db
-#   db_path <- system.file("extdata", "example_accessions.sql", package = "RADalign")
-#
-#   #open db connection
-#   con <- dbConnect(
-#     RSQLite::SQLite(),
-#     dbname = db_path
-#   )
-#
-#   # dbExecute(con, "ATTACH DATABASE 'destination_subset.sqlite' AS dest_db")
-#
-#   file_name <- "Metascope_accessions_db.sqlite"
-#   file_path <- file.path(download_folder, file_name)
-#
-#   create_db_query <- paste0("ATTACH DATABASE '", file_path, "' AS dest_db")
-#   dbExecute(con, creat_db_query)
-#
-#   placeholders <- paste(rep("?", length(accessions_)))
-#
-#   dbExecute(con, "CREATE TABLE dest_db.accessionTaxa AS SELECT * FROM accessionTaxa WHERE accession = ?", params = accessions_list)
-#
-#   dbExecute(con, "DETACH DATABASE dest_db")
-#   dbDisconnect(con)
-#
-#   return(print("DONE"))
-#
-# }
-#
-#
-#
-#
-# # acc_list <- c("GCF_000006765.1.1", "GCF_000006765.1.2", "GCF_000006765.1.3", "GCF_000006765.1.4", "GCF_000007505.1.1", "GCF_000007505.1.2", "GCF_000007505.1.3")
-# #
-# # print(get_MetaScope_reference(acc_list, "/Users/myeshagilliland/BYU/BIO465/RADalign"))
-# #
-# # print(download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis")))
-#
-# # accessions_list <- c("NZ_CTYB01000002.1",
-# #                      "NZ_CTYB01000003.1",
-# #                      "NZ_CTYB01000004.1",
-# #                      "NZ_LAWV01000006.1",
-# #                      "NZ_LAWV01000007.1",
-# #                      "NC_009641.1",
-# #                      "NZ_JBBIAE010000011.1",
-# #                      "NZ_JBBIAE010000012.1")
-# accessions_list <- c("NZ_CTYB01000002.1")
-# print(download_MetaScope_accessions(accessions_list, "/Users/myeshagilliland/BYU/BIO465/RADalign"))
-#
+# print(download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis")))
+
+# accessions_list <- c("NZ_CTYB01000002.1",
+#                      "NZ_CTYB01000003.1",
+#                      "NZ_CTYB01000004.1",
+#                      "NZ_LAWV01000006.1",
+#                      "NZ_LAWV01000007.1",
+#                      "NC_009641.1",
+#                      "NZ_JBBIAE010000011.1",
+#                      "NZ_JBBIAE010000012.1")
+# # accessions_list <- c("NZ_CTYB01000002.1")
+# download_folder <- "/Users/myeshagilliland/BYU/BIO465/RADalign"
+# download_MetaScope_accessions(accessions_list, "/Users/myeshagilliland/BYU/BIO465/RADalign")
+
