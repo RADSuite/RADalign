@@ -1,7 +1,7 @@
+# nolint start: line_length_linter
 library(Biostrings)
 library(msa)
 library(phangorn)
-# nolint start: line_length_linter
 
 # create the user data directory if it doesn't already exist
 data_dir <- tools::R_user_dir("RADalign", which = "data")
@@ -24,15 +24,14 @@ if (!dir.exists(data_dir)) dir.create(data_dir, recursive = TRUE)
 #' @export
 #'
 #' @examples
-#' ## TODO::still in progress
-#' alignVRegions(sequences)
-#' $V11
-#' [1] "GCF_000006765.1.1__V1" "GCF_000006765.1.2__V1" "GCF_000006765.1.3__V1"
-#' [4] "GCF_000006765.1.4__V1"
+#' createRADq(c("Pseudomonas aeruginosa"), TRUE)
+#' createSummary(IDs, TRUE)
+#'                   species variable_region copy_num seq_id
+#' 1  Pseudomonas aeruginosa              V1        1    V11
+#' 2  Pseudomonas aeruginosa              V1        2    V11
 #' ...
-#' $V91
-#' [1] "GCF_000006765.1.1__V9" "GCF_000006765.1.2__V9" "GCF_000006765.1.3__V9"
-#' [4] "GCF_000006765.1.4__V9"
+#' 35 Pseudomonas aeruginosa              V9        3    V91
+#' 36 Pseudomonas aeruginosa              V9        4    V91
 createRADq <- function(species_list, return_dataframe = FALSE) {
     sequences <- getSequences(species_list)
     IDs <- alignVRegions(sequences)
@@ -160,12 +159,18 @@ alignVRegions <- function(sequences) {
 #' containing the summary data should be returned in addition to the
 #' csv created by default.
 #'
-#' @return 
+#' @return a dataframe containing the summary data when return_df = TRUE
 #'
 #' @export
 #'
 #' @examples
-#' 
+#' createSummary(IDs, TRUE)
+#'                   species variable_region copy_num seq_id
+#' 1  Pseudomonas aeruginosa              V1        1    V11
+#' 2  Pseudomonas aeruginosa              V1        2    V11
+#' ...
+#' 35 Pseudomonas aeruginosa              V9        3    V91
+#' 36 Pseudomonas aeruginosa              V9        4    V91
 createSummary <- function(IDs, return_df = FALSE) {
     # use vectors to retrieve and sort individual pieces of information from ID list
     species_vec <- character()
@@ -206,14 +211,12 @@ createSummary <- function(IDs, return_df = FALSE) {
     }
 }
 
-
-
 # note: remember to always comment out scratch code you're using for tests
 # so the package will load correctly!
 
 # df <- createRADq(c("Pseudomonas aeruginosa"), TRUE)
-# df <- selectVRegions(c("V1","V5"), TRUE)
 # print(df)
+# df <- selectVRegions(c("V1","V5"), TRUE)
 
 # This is still useful code, but a full distance calculation is more than
 # we need for now. I'm leaving this in here in case my implementation proves
@@ -233,3 +236,5 @@ createSummary <- function(IDs, return_df = FALSE) {
 #         }
 #     }
 # }
+
+# nolint end
