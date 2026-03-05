@@ -18,6 +18,12 @@ For a group of sequences in RADlib, align the sequences in each
 V-region individually
 }
 \examples{
-## TODO::still in progress
 alignVRegions(sequences)
+$V11
+[1] "GCF_000006765.1.1__V1" "GCF_000006765.1.2__V1" "GCF_000006765.1.3__V1"
+[4] "GCF_000006765.1.4__V1"
+...
+$V91
+[1] "GCF_000006765.1.1__V9" "GCF_000006765.1.2__V9" "GCF_000006765.1.3__V9"
+[4] "GCF_000006765.1.4__V9"
 }

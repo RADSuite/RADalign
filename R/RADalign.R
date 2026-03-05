@@ -1,11 +1,64 @@
 library(Biostrings)
 library(msa)
 library(phangorn)
+# nolint start: line_length_linter
 
 # create the user data directory if it doesn't already exist
 data_dir <- tools::R_user_dir("RADalign", which = "data")
 if (!dir.exists(data_dir)) dir.create(data_dir, recursive = TRUE)
 
+#' createRADq
+#'
+#' Given a list of species names, pull sequences for each species
+#' from RADlibV, align them, and return either a csv or csv and 
+#' dataframe containing a summary of which variable regions aligned 
+#' exactly, designated by a unique ID for each group.
+#'
+#' @param sequences a vector containing species names
+#' @param return_dataframe a boolean indicating whether a dataframe
+#' containing the summary data should be returned in addition to the
+#' csv created by default.
+#'
+#' @return a dataframe containing the summary data when return_dataframe = TRUE
+#'
+#' @export
+#'
+#' @examples
+#' ## TODO::still in progress
+#' alignVRegions(sequences)
+#' $V11
+#' [1] "GCF_000006765.1.1__V1" "GCF_000006765.1.2__V1" "GCF_000006765.1.3__V1"
+#' [4] "GCF_000006765.1.4__V1"
+#' ...
+#' $V91
+#' [1] "GCF_000006765.1.1__V9" "GCF_000006765.1.2__V9" "GCF_000006765.1.3__V9"
+#' [4] "GCF_000006765.1.4__V9"
+createRADq <- function(species_list, return_dataframe = FALSE) {
+    sequences <- getSequences(species_list)
+    IDs <- alignVRegions(sequences)
+    createSummary(IDs, return_dataframe)
+}
+
+#' getSequences
+#'
+#' Given a list of species, retrieves all sequences associated with
+#' those taxa from RADlibV.
+#'
+#' @param taxa a vector containing species names
+#'
+#' @return a list of DNAStringSet objects containing the sequences for
+#' each variable region for each species.
+#'
+#' @export
+#'
+#' @examples
+#' createRADq(c("Pseudomonas aeruginosa"), TRUE)
+#'                   species variable_region copy_num seq_id
+#' 1  Pseudomonas aeruginosa              V1        1    V11
+#' 2  Pseudomonas aeruginosa              V1        2    V11
+#' ...
+#' 35 Pseudomonas aeruginosa              V9        3    V91
+#' 36 Pseudomonas aeruginosa              V9        4    V91
 getSequences <- function(taxa) {
     accessions <- get_accession_ids(taxa)
     RADlibV <- system.file("extdata", "RADlibV.fa", package = "RADalign")
@@ -25,8 +78,14 @@ getSequences <- function(taxa) {
 #' @export
 #'
 #' @examples
-#' ## TODO::still in progress
 #' alignVRegions(sequences)
+#' $V11
+#' [1] "GCF_000006765.1.1__V1" "GCF_000006765.1.2__V1" "GCF_000006765.1.3__V1"
+#' [4] "GCF_000006765.1.4__V1"
+#' ...
+#' $V91
+#' [1] "GCF_000006765.1.1__V9" "GCF_000006765.1.2__V9" "GCF_000006765.1.3__V9"
+#' [4] "GCF_000006765.1.4__V9"
 alignVRegions <- function(sequences) {
     IDs <- list()
     all_v_regions <- c("V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9")
@@ -106,11 +165,8 @@ selectVRegions <- function(vregions, return_df = FALSE) {
 # note: remember to always comment out scratch code you're using for tests
 # so the package will load correctly!
 
-sequences <- getSequences(c("Pseudomonas aeruginosa"))
-print(sequences)
-IDs <- alignVRegions(sequences)
-createSummary(IDs)
-selectVRegions(c("V1", "V5"))
+df <- createRADq(c("Pseudomonas aeruginosa"), TRUE)
+print(df)
 
 # This is still useful code, but a full distance calculation is more than
 # we need for now. I'm leaving this in here in case my implementation proves
