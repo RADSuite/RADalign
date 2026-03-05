@@ -4,7 +4,11 @@
 \alias{download_RAD_data}
 \title{download_RAD}
 \usage{
-download_RAD_data(pipeline, species_list, download_location = getwd())
+download_RAD_data(
+  pipeline,
+  species_list,
+  download_location = fs::path_home("Downloads")
+)
 }
 \arguments{
 \item{pipeline}{name of pipeline. Valid inputs: ("MetaScope", "Kraken")}
