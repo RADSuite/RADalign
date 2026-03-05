@@ -165,8 +165,8 @@ selectVRegions <- function(vregions, return_df = FALSE) {
 # note: remember to always comment out scratch code you're using for tests
 # so the package will load correctly!
 
-df <- createRADq(c("Pseudomonas aeruginosa"), TRUE)
-print(df)
+# df <- createRADq(c("Pseudomonas aeruginosa"), TRUE)
+# print(df)
 
 # This is still useful code, but a full distance calculation is more than
 # we need for now. I'm leaving this in here in case my implementation proves
