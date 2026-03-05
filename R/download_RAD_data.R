@@ -18,7 +18,7 @@ library(fs)
 
 #download_location = fs::path_home("Downloads")
 
-download_RAD_data <- function(pipeline, species_list, download_location = getwd()) {
+download_RAD_data <- function(pipeline, species_list, download_location = fs::path_home("Downloads")) {
 
   accessions_list <- get_accession_ids(species_list)
 
@@ -137,21 +137,21 @@ download_MetaScope_accessions <- function(accessions_list, download_folder) {
 
 
 
-# acc_list <- c("GCF_000006765.1.1", "GCF_000006765.1.2", "GCF_000006765.1.3", "GCF_000006765.1.4", "GCF_000007505.1.1", "GCF_000007505.1.2", "GCF_000007505.1.3")
-#
-# print(get_MetaScope_reference(acc_list, "/Users/myeshagilliland/BYU/BIO465/RADalign"))
-#
-# print(download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis")))
+acc_list <- c("GCF_000006765.1.1", "GCF_000006765.1.2", "GCF_000006765.1.3", "GCF_000006765.1.4", "GCF_000007505.1.1", "GCF_000007505.1.2", "GCF_000007505.1.3")
 
-# accessions_list <- c("NZ_CTYB01000002.1",
-#                      "NZ_CTYB01000003.1",
-#                      "NZ_CTYB01000004.1",
-#                      "NZ_LAWV01000006.1",
-#                      "NZ_LAWV01000007.1",
-#                      "NC_009641.1",
-#                      "NZ_JBBIAE010000011.1",
-#                      "NZ_JBBIAE010000012.1")
-# # accessions_list <- c("NZ_CTYB01000002.1")
-# download_folder <- "/Users/myeshagilliland/BYU/BIO465/RADalign"
-# download_MetaScope_accessions(accessions_list, "/Users/myeshagilliland/BYU/BIO465/RADalign")
+print(download_MetaScope_reference(acc_list, "/Users/myeshagilliland/BYU/BIO465/RADalign"))
+
+print(download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis")))
+
+accessions_list <- c("NZ_CTYB01000002.1",
+                     "NZ_CTYB01000003.1",
+                     "NZ_CTYB01000004.1",
+                     "NZ_LAWV01000006.1",
+                     "NZ_LAWV01000007.1",
+                     "NC_009641.1",
+                     "NZ_JBBIAE010000011.1",
+                     "NZ_JBBIAE010000012.1")
+# accessions_list <- c("NZ_CTYB01000002.1")
+download_folder <- "/Users/myeshagilliland/BYU/BIO465/RADalign"
+download_MetaScope_accessions(accessions_list, "/Users/myeshagilliland/BYU/BIO465/RADalign")
 

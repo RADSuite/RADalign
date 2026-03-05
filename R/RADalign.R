@@ -106,11 +106,11 @@ selectVRegions <- function(vregions, return_df = FALSE) {
 # note: remember to always comment out scratch code you're using for tests
 # so the package will load correctly!
 
-sequences <- getSequences(c("Pseudomonas aeruginosa"))
-print(sequences)
-IDs <- alignVRegions(sequences)
-createSummary(IDs)
-selectVRegions(c("V1", "V5"))
+# sequences <- getSequences(c("Pseudomonas aeruginosa"))
+# print(sequences)
+# IDs <- alignVRegions(sequences)
+# createSummary(IDs)
+# selectVRegions(c("V1", "V5"))
 
 # This is still useful code, but a full distance calculation is more than
 # we need for now. I'm leaving this in here in case my implementation proves
