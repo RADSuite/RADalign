@@ -3,7 +3,7 @@ library(DBI)
 library(RSQLite)
 library(Biostrings)
 
-#' download_RAD
+#' download_RAD_data
 #'
 #' This function allows users to download files for integration with analysis pipelines, currently supports MetaScope and Kraken.
 #'
@@ -16,7 +16,7 @@ library(Biostrings)
 #' @export
 #'
 #' @examples
-#' download_RADsynch("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
+#' download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
 #' > Files downloaded successfully to ~/Users/user/Downloads/RADdownloads_05032026_204428_QVrV4idv :
 #' Metascope_reference_db.fasta
 #' Metascope_accessions_db.sqlite
