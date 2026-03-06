@@ -17,16 +17,16 @@ library(Biostrings)
 #'
 #' @examples
 #' download_RADsynch("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
-#' > "Downloaded Successfully to: ~/user/Downloads"
-
-#download_location = fs::path_home("Downloads")
+#' > Files downloaded successfully to ~/Users/user/Downloads/RADdownloads_05032026_204428_QVrV4idv :
+#' Metascope_reference_db.fasta
+#' Metascope_accessions_db.sqlite
 
 download_RAD_data <- function(pipeline, species_list, download_location = fs::path_home("Downloads")) {
 
   #get accession ids for all species in species_list
   accessions_list <- get_accession_ids(species_list)
 
-  #just temporary while acc are different
+  #just temporary while acc ids are different
   acc_list <- c("NZ_CTYB01000002.1",
                "NZ_CTYB01000003.1",
                "NZ_CTYB01000004.1",
@@ -49,8 +49,9 @@ download_RAD_data <- function(pipeline, species_list, download_location = fs::pa
   #store names of all created files for output
   file_paths <- c()
 
+  #generate and download correct files based on pipeline
   if (pipeline == "MetaScope") {
-    #generate files & save names
+    #generate MetaScope files & save names
     reference_file_name <- download_MetaScope_reference(accessions_list, download_folder)
     accession_file_name <- download_MetaScope_accessions(acc_list, download_folder)
     file_paths <- c(reference_file_name, accession_file_name)
@@ -64,6 +65,21 @@ download_RAD_data <- function(pipeline, species_list, download_location = fs::pa
 
   return ()
 }
+
+#' download_MetaScope_reference
+#'
+#' This function filters RADlib by accession ids and downloads a reference database to the provided folder
+#'
+#' @param accessions_list list of string accession ids of sequences to download from RADlib.
+#' @param download_folder character path to desired destination folder
+#'
+#' @return This function downloads a filtered portion of RADlib (fasta) and outputs the file name.
+#'
+#' @export
+#'
+#' @examples
+#' download_MetaScope_reference(c("NZ_CTYB01000002.1","NZ_CTYB01000003.1"), ~/Users/user/Downloads/RAD_downloads_folder)
+#' > "Metascope_reference_db.fasta"
 
 download_MetaScope_reference <- function(accessions_list, download_folder) {
 
@@ -89,6 +105,21 @@ download_MetaScope_reference <- function(accessions_list, download_folder) {
   return (file_name)
 
 }
+
+#' download_MetaScope_accessions
+#'
+#' This function filters RADaccessions by accession ids and downloads a reference database to the provided folder
+#'
+#' @param accessions_list list of string accession ids of sequences to download from RADlib.
+#' @param download_folder character path to desired destination folder
+#'
+#' @return This function downloads a filtered portion of RADaccessions (sqlite) and outputs the file name.
+#'
+#' @export
+#'
+#' @examples
+#' download_MetaScope_accessions(c("NZ_CTYB01000002.1","NZ_CTYB01000003.1"), ~/Users/user/Downloads/RAD_downloads_folder)
+#' > "Metascope_accessions_db.sqlite"
 
 download_MetaScope_accessions <- function(accessions_list, download_folder) {
 
@@ -145,15 +176,10 @@ download_MetaScope_accessions <- function(accessions_list, download_folder) {
 
 }
 
+# download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
 
-
-
-#acc_list <- c("GCF_000006765.1.1", "GCF_000006765.1.2", "GCF_000006765.1.3", "GCF_000006765.1.4", "GCF_000007505.1.1", "GCF_000007505.1.2", "GCF_000007505.1.3")
-
+# acc_list <- c("GCF_000006765.1.1", "GCF_000006765.1.2", "GCF_000006765.1.3", "GCF_000006765.1.4", "GCF_000007505.1.1", "GCF_000007505.1.2", "GCF_000007505.1.3")
 # print(download_MetaScope_reference(acc_list, "/Users/myeshagilliland/BYU/BIO465/RADalign"))
-
-# print(download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis")))
-
 # accessions_list <- c("NZ_CTYB01000002.1",
 #                      "NZ_CTYB01000003.1",
 #                      "NZ_CTYB01000004.1",
@@ -162,7 +188,7 @@ download_MetaScope_accessions <- function(accessions_list, download_folder) {
 #                      "NC_009641.1",
 #                      "NZ_JBBIAE010000011.1",
 #                      "NZ_JBBIAE010000012.1")
-# # accessions_list <- c("NZ_CTYB01000002.1")
+# accessions_list <- c("NZ_CTYB01000002.1")
 # download_folder <- "/Users/myeshagilliland/BYU/BIO465/RADalign"
-#download_MetaScope_accessions(accessions_list, "/Users/myeshagilliland/BYU/BIO465/RADalign")
+# download_MetaScope_accessions(accessions_list, "/Users/myeshagilliland/BYU/BIO465/RADalign")
 

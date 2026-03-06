@@ -23,13 +23,12 @@ dataframe containing a summary of which variable regions aligned
 exactly, designated by a unique ID for each group.
 }
 \examples{
-## TODO::still in progress
-alignVRegions(sequences)
-$V11
-[1] "GCF_000006765.1.1__V1" "GCF_000006765.1.2__V1" "GCF_000006765.1.3__V1"
-[4] "GCF_000006765.1.4__V1"
+createRADq(c("Pseudomonas aeruginosa"), TRUE)
+createSummary(IDs, TRUE)
+                  species variable_region copy_num seq_id
+1  Pseudomonas aeruginosa              V1        1    V11
+2  Pseudomonas aeruginosa              V1        2    V11
 ...
-$V91
-[1] "GCF_000006765.1.1__V9" "GCF_000006765.1.2__V9" "GCF_000006765.1.3__V9"
-[4] "GCF_000006765.1.4__V9"
+35 Pseudomonas aeruginosa              V9        3    V91
+36 Pseudomonas aeruginosa              V9        4    V91
 }

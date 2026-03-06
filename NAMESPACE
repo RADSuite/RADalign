@@ -2,9 +2,11 @@
 
 export(alignVRegions)
 export(createRADq)
+export(createSummary)
 export(download_RAD_data)
 export(getSequences)
 export(getVRegions)
 export(get_accession_ids)
 export(get_accessions_df)
 export(readSequences)
+export(selectVRegions)
