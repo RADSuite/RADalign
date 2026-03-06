@@ -1,7 +1,7 @@
+# nolint start: line_length_linter
 library(Biostrings)
 library(msa)
 library(phangorn)
-# nolint start: line_length_linter
 
 # create the user data directory if it doesn't already exist
 data_dir <- tools::R_user_dir("RADalign", which = "data")
@@ -24,19 +24,58 @@ if (!dir.exists(data_dir)) dir.create(data_dir, recursive = TRUE)
 #' @export
 #'
 #' @examples
-#' ## TODO::still in progress
-#' alignVRegions(sequences)
-#' $V11
-#' [1] "GCF_000006765.1.1__V1" "GCF_000006765.1.2__V1" "GCF_000006765.1.3__V1"
-#' [4] "GCF_000006765.1.4__V1"
+#' createRADq(c("Pseudomonas aeruginosa"), TRUE)
+#' createSummary(IDs, TRUE)
+#'                   species variable_region copy_num seq_id
+#' 1  Pseudomonas aeruginosa              V1        1    V11
+#' 2  Pseudomonas aeruginosa              V1        2    V11
 #' ...
-#' $V91
-#' [1] "GCF_000006765.1.1__V9" "GCF_000006765.1.2__V9" "GCF_000006765.1.3__V9"
-#' [4] "GCF_000006765.1.4__V9"
+#' 35 Pseudomonas aeruginosa              V9        3    V91
+#' 36 Pseudomonas aeruginosa              V9        4    V91
 createRADq <- function(species_list, return_dataframe = FALSE) {
     sequences <- getSequences(species_list)
     IDs <- alignVRegions(sequences)
     createSummary(IDs, return_dataframe)
+}
+
+#' selectVRegions
+#'
+#' After createRADq has been run, filters the csv file from 
+#' createRADq to include only user-specificed variable regions.
+#'
+#' @param vregions a vector of variable regions to include in the
+#' filtered file
+#' @param return_df a boolean indicating whether a dataframe
+#' containing the summary data should be returned in addition to the
+#' csv created by default.
+#'
+#' @return a dataframe containing the summary data when return_dataframe = TRUE
+#'
+#' @export
+#'
+#' @examples
+#' selectVRegions(c("V1", "V5"))
+#'    X                species variable_region copy_num seq_id
+# 1   1 Pseudomonas aeruginosa              V1        1    V11
+# 2   2 Pseudomonas aeruginosa              V1        2    V11
+# 3   3 Pseudomonas aeruginosa              V1        3    V11
+# 4   4 Pseudomonas aeruginosa              V1        4    V11
+# 17 17 Pseudomonas aeruginosa              V5        3    V51
+# 18 18 Pseudomonas aeruginosa              V5        4    V51
+# 19 19 Pseudomonas aeruginosa              V5        1    V52
+# 20 20 Pseudomonas aeruginosa              V5        2    V52
+selectVRegions <- function(vregions, return_df = FALSE) {
+    infile <- file.path(data_dir, "RADq.csv")
+    if (!file.exists(infile)) {
+        print("RADq.csv not yet created")
+    }
+    full_summary <- read.csv(infile)
+    filtered <- full_summary[full_summary$variable_region %in% vregions, ]
+    outfile <- file.path(data_dir, "RADq_filtered.csv")
+    write.csv(filtered, outfile)
+    if (return_df) {
+        return(filtered)
+    }
 }
 
 #' getSequences
@@ -108,6 +147,30 @@ alignVRegions <- function(sequences) {
     return(IDs)
 }
 
+#' createSummary
+#'
+#' Takes the list of IDs created by alignVRegions and summarizes the
+#' data in a csv. Can also return the summary as a dataframe, if 
+#' return_df is set to true.
+#'
+#' @param IDs a list containing unique IDs for each group of exactly
+#' aligned sequences in each v-region
+#' @param return_df a boolean indicating whether a dataframe
+#' containing the summary data should be returned in addition to the
+#' csv created by default.
+#'
+#' @return a dataframe containing the summary data when return_df = TRUE
+#'
+#' @export
+#'
+#' @examples
+#' createSummary(IDs, TRUE)
+#'                   species variable_region copy_num seq_id
+#' 1  Pseudomonas aeruginosa              V1        1    V11
+#' 2  Pseudomonas aeruginosa              V1        2    V11
+#' ...
+#' 35 Pseudomonas aeruginosa              V9        3    V91
+#' 36 Pseudomonas aeruginosa              V9        4    V91
 createSummary <- function(IDs, return_df = FALSE) {
     # use vectors to retrieve and sort individual pieces of information from ID list
     species_vec <- character()
@@ -148,25 +211,12 @@ createSummary <- function(IDs, return_df = FALSE) {
     }
 }
 
-selectVRegions <- function(vregions, return_df = FALSE) {
-    infile <- file.path(data_dir, "RADq.csv")
-    if (!file.exists(infile)) {
-        print("RADq.csv not yet created")
-    }
-    full_summary <- read.csv(infile)
-    filtered <- full_summary[full_summary$variable_region %in% vregions, ]
-    outfile <- file.path(data_dir, "RADq_filtered.csv")
-    write.csv(filtered, outfile)
-    if (return_df) {
-        return(filtered)
-    }
-}
-
 # note: remember to always comment out scratch code you're using for tests
 # so the package will load correctly!
 
 # df <- createRADq(c("Pseudomonas aeruginosa"), TRUE)
 # print(df)
+# df <- selectVRegions(c("V1","V5"), TRUE)
 
 # This is still useful code, but a full distance calculation is more than
 # we need for now. I'm leaving this in here in case my implementation proves
@@ -186,3 +236,5 @@ selectVRegions <- function(vregions, return_df = FALSE) {
 #         }
 #     }
 # }
+
+# nolint end
