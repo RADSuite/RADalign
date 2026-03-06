@@ -1,4 +1,7 @@
 library(fs)
+library(DBI)
+library(RSQLite)
+library(Biostrings)
 
 #' download_RAD
 #'
@@ -20,29 +23,46 @@ library(fs)
 
 download_RAD_data <- function(pipeline, species_list, download_location = fs::path_home("Downloads")) {
 
+  #get accession ids for all species in species_list
   accessions_list <- get_accession_ids(species_list)
 
-  download_folder <- file.path(download_location, "RADdownloads")
+  #just temporary while acc are different
+  acc_list <- c("NZ_CTYB01000002.1",
+               "NZ_CTYB01000003.1",
+               "NZ_CTYB01000004.1",
+               "NZ_LAWV01000006.1",
+               "NZ_LAWV01000007.1",
+               "NC_009641.1",
+               "NZ_JBBIAE010000011.1",
+               "NZ_JBBIAE010000012.1")
+
+  #generate unique folder name
+  rand_string <- paste0(sample(c(letters, LETTERS, 0:9), 8, replace = TRUE), collapse = "")
+  folder_name <- paste0("RADdownloads", format(Sys.time(), "_%d%m%Y_%H%M%S_"), rand_string)
+
+  #create path for folder
+  download_folder <- file.path(download_location, folder_name)
   if (!dir.exists(download_folder)) {
     dir.create(download_folder, recursive = TRUE)
   }
 
+  #store names of all created files for output
   file_paths <- c()
 
   if (pipeline == "MetaScope") {
-    #accessions_SQLite_tmp_path <- get_MetaScope_accessions(accessions_list)
-    # reference_fasta_tmp_path <- download_MetaScope_reference(accessions_list, download_location)
-
-    reference_file_name <- download_MetaScope_reference(accessions_list, download_location)
-
-    file_paths <- c(reference_file_name)
-
+    #generate files & save names
+    reference_file_name <- download_MetaScope_reference(accessions_list, download_folder)
+    accession_file_name <- download_MetaScope_accessions(acc_list, download_folder)
+    file_paths <- c(reference_file_name, accession_file_name)
   } else if (pipeline == "Kraken") {
     # download_Kraken_files(accessions_list)
     print("You chose Kraken")
   }
 
-  return (paste0("Files downloaded successfully to: ", download_folder))
+  cat("Files downloaded successfully to", download_folder, ":\n")
+  cat(file_paths, sep = "\n")
+
+  return ()
 }
 
 download_MetaScope_reference <- function(accessions_list, download_folder) {
@@ -66,19 +86,14 @@ download_MetaScope_reference <- function(accessions_list, download_folder) {
   #   return ("Error writing file to ")
   # }
 
-  return (paste0("Download successful: ", file_name))
+  return (file_name)
 
 }
 
-library(DBI)
-library(RSQLite)
-
 download_MetaScope_accessions <- function(accessions_list, download_folder) {
-  #
-  # temp_accessions <- filter_accessions_SQLite(accessions_list)
 
   #location of accessions db
-  db_path <- system.file("extdata", "example_accessions.sql", package = "RADalign")
+  db_path <- system.file("extdata", "example_accessions.sqlite", package = "RADalign")
 
   #open db connection
   con <- dbConnect(
@@ -107,10 +122,6 @@ download_MetaScope_accessions <- function(accessions_list, download_folder) {
     dbname = file_path
   )
   taxa_ids <- dbGetQuery(con2, "SELECT taxa FROM accessionTaxa;")$taxa
-  # print(taxa_table)
-  # taxa_ids <- taxa_table[taxa]
-  print(taxa_ids)
-  # print(taxa_ids)
   dbDisconnect(con2)
 
   #create names table filtered by taxa_ids
@@ -130,19 +141,19 @@ download_MetaScope_accessions <- function(accessions_list, download_folder) {
   dbExecute(con, "DETACH DATABASE dest_db;")
   dbDisconnect(con)
 
-  return(print("DONE"))
+  return (file_name)
 
 }
 
 
 
 
-# acc_list <- c("GCF_000006765.1.1", "GCF_000006765.1.2", "GCF_000006765.1.3", "GCF_000006765.1.4", "GCF_000007505.1.1", "GCF_000007505.1.2", "GCF_000007505.1.3")
-#
+#acc_list <- c("GCF_000006765.1.1", "GCF_000006765.1.2", "GCF_000006765.1.3", "GCF_000006765.1.4", "GCF_000007505.1.1", "GCF_000007505.1.2", "GCF_000007505.1.3")
+
 # print(download_MetaScope_reference(acc_list, "/Users/myeshagilliland/BYU/BIO465/RADalign"))
-#
+
 # print(download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis")))
-#
+
 # accessions_list <- c("NZ_CTYB01000002.1",
 #                      "NZ_CTYB01000003.1",
 #                      "NZ_CTYB01000004.1",
@@ -153,5 +164,5 @@ download_MetaScope_accessions <- function(accessions_list, download_folder) {
 #                      "NZ_JBBIAE010000012.1")
 # # accessions_list <- c("NZ_CTYB01000002.1")
 # download_folder <- "/Users/myeshagilliland/BYU/BIO465/RADalign"
-# download_MetaScope_accessions(accessions_list, "/Users/myeshagilliland/BYU/BIO465/RADalign")
+#download_MetaScope_accessions(accessions_list, "/Users/myeshagilliland/BYU/BIO465/RADalign")
 
