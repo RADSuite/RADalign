@@ -21,7 +21,7 @@ library(Biostrings)
 #' Metascope_reference_db.fasta
 #' Metascope_accessions_db.sqlite
 
-download_RAD_data <- function(pipeline, species_list, download_location = fs::path_home("Downloads")) {
+download_RAD_data <- function(pipeline, species_list, filter_list = c(), download_location = fs::path_home("Downloads")) {
 
   #get accession ids for all species in species_list
   accessions_list <- get_accession_ids(species_list)
@@ -53,18 +53,32 @@ download_RAD_data <- function(pipeline, species_list, download_location = fs::pa
   if (pipeline == "MetaScope") {
     #generate MetaScope files & save names
     reference_folder <- download_MetaScope_reference(accessions_list, download_folder)
-    # reference_dir_name <- separate_sequences(reference_file_name, download_folder)
     accession_file <- download_MetaScope_accessions(acc_list, download_folder)
-    file_paths <- c(accession_file, reference_folder)
+    #generate MetaScope filter database if requested
+    if (length(filter_list) > 0) {
+      filter_accessions_list <- get_accession_ids(filter_list)
+      filter_folder <- download_MetaScope_reference(filter_accessions_list, download_folder, filter = TRUE)
+      file_paths <- c(accession_file, reference_folder$folder, filter_folder$folder)
+    } else {
+      file_paths <- c(accession_file, reference_folder$folder)
+    }
   } else if (pipeline == "Kraken") {
     # download_Kraken_files(accessions_list)
     print("You chose Kraken")
   }
 
-  # cat("Files downloaded successfully to", download_folder, ":\n")
-  # cat(file_paths, sep = "\n")
+  cat("Files downloaded successfully to", download_folder, ":\n")
+  if (pipeline == "MetaScope") {
+    cat(accession_file, "\n")
+    cat(reference_folder$folder, ":\n  ")
+    cat(unlist(reference_folder$files), sep = "\n  ")
+    if (length(filter_list) > 0) {
+      cat(filter_folder$folder, ":\n  ")
+      cat(unlist(filter_folder$files), sep = "\n  ")
+    }
+  }
 
-  return (list(location = download_folder, contents = file_paths))
+  return (download_folder)
 }
 
 #' download_MetaScope_reference
@@ -131,7 +145,7 @@ download_MetaScope_reference <- function(accessions_list, download_folder, filte
   # }
 
   # return (file_name)
-  return (list(ref_folder = folder_name, ref_files = file_names))
+  return (list(folder = folder_name, files = file_names))
 
 }
 
@@ -213,13 +227,15 @@ download_MetaScope_accessions <- function(accessions_list, download_folder) {
 #   return (folder_name)
 # }
 
-download_MetaScope_filter <- function(accessions_list, download_folder) {
-
-  filter_folder <- download_MetaScope_reference(accessions_list, download_folder, filter = TRUE)
-  return(list(folder = filter_folder$ref_folder, files = filter_folder$ref_files))
-}
+# download_MetaScope_filter <- function(accessions_list, download_folder) {
+#
+#   filter_folder <- download_MetaScope_reference(accessions_list, download_folder, filter = TRUE)
+#   return(list(folder = filter_folder$folder, files = filter_folder$files))
+# }
 
 # print(download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis")))
+
+# print(download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"), c("Mycoplasma mobile", "Salmonella enterica")))
 
 # acc_list <- c("GCF_000006765.1.1", "GCF_000006765.1.2", "GCF_000006765.1.3", "GCF_000006765.1.4", "GCF_000007505.1.1", "GCF_000007505.1.2", "GCF_000007505.1.3")
 # print(download_MetaScope_reference(acc_list, "/Users/myeshagilliland/BYU/BIO465/RADalign"))
