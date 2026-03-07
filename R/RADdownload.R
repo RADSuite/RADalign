@@ -125,7 +125,7 @@ download_MetaScope_reference <- function(accessions_list, download_folder, filte
   for (i in seq_along(sequences)) {
     # create file name
     id <- accessions_list[i]
-    copy_num <- substr(id, nchar(id), nchar(id))
+    copy_num = regmatches(id, regexpr("[^\\.]+$", id))
     species_name <- paste(unlist(strsplit(species_list[i], " ")), collapse = "_")
     seq_file_name <- paste0(species_name, "_copy", copy_num, ".fasta")
     seq_file_path <- file.path(folder_path, seq_file_name)
