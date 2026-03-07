@@ -2,6 +2,7 @@
 library(Biostrings)
 library(msa)
 library(phangorn)
+library(tidyverse)
 
 # create the user data directory if it doesn't already exist
 data_dir <- tools::R_user_dir("RADalign", which = "data")
@@ -46,7 +47,7 @@ createRADq <- function(species_list, return_dataframe = FALSE) {
 #' @param vregions a vector of variable regions to include in the
 #' filtered file
 #' @param return_df a boolean indicating whether a dataframe
-#' containing the summary data should be returned in addition to the
+#' containing the data should be returned in addition to the
 #' csv created by default.
 #'
 #' @return a dataframe containing the summary data when return_dataframe = TRUE
@@ -76,6 +77,41 @@ selectVRegions <- function(vregions, return_df = FALSE) {
     if (return_df) {
         return(filtered)
     }
+}
+
+#' createSummarizedIDs
+#'
+#' After createRADq has been run, combines all unique IDs for each v-region in 
+#' each species into a single ID
+#'
+#' @param return_df a boolean indicating whether a dataframe
+#' containing the data should be returned in addition to the
+#' csv created by default.
+#'
+#' @return a dataframe containing the summary data when return_dataframe = TRUE
+#'
+#' @export
+#'
+#' @examples
+#' createSummarizedIDs(TRUE)
+#'                  species  V1  V2  V3  V4     V5  V6  V7  V8  V9
+#' 1 Pseudomonas aeruginosa V11 V21 V31 V41 V51V52 V61 V71 V81 V91
+createSummarizedIDs <- function(return_df = FALSE) {
+    infile <- file.path(data_dir, "RADq.csv")
+    if (!file.exists(infile)) {
+        print("RADq.csv not yet created")
+    }
+    data <- read.csv(infile)
+
+    data <- as_tibble(data)
+    vregion_data <- pivot_wider(data, names_from = variable_region, values_from = seq_id) %>%
+    group_by(species) %>%
+    summarize(across(starts_with("V"), ~ str_flatten(unique(na.omit(.x)), collapse = "")))
+
+    filepath <- file.path(data_dir, "RADq_summarized_IDs.csv")
+    write.csv(vregion_data, filepath)
+
+    if (return_df) return(as.data.frame(vregion_data))
 }
 
 #' getSequences
@@ -206,17 +242,18 @@ createSummary <- function(IDs, return_df = FALSE) {
     filepath <- file.path(data_dir, "RADq.csv")
     write.csv(full_summary, filepath)
 
-    if (return_df) {
-        return(full_summary)
-    }
+    if (return_df) return(full_summary)
 }
 
 # note: remember to always comment out scratch code you're using for tests
 # so the package will load correctly!
 
 # df <- createRADq(c("Pseudomonas aeruginosa"), TRUE)
+# groups <- createSummarizedIDs(TRUE)
+# print(groups)
 # print(df)
 # df <- selectVRegions(c("V1","V5"), TRUE)
+
 
 # This is still useful code, but a full distance calculation is more than
 # we need for now. I'm leaving this in here in case my implementation proves
