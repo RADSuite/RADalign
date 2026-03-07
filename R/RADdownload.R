@@ -17,7 +17,7 @@ library(Biostrings)
 #'
 #' @examples
 #' download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
-#' > Files downloaded successfully to ~/Users/user/Downloads/RADdownloads_05032026_204428_QVrV4idv :
+#' > Files downloaded successfully to /Users/user/Downloads/RADdownloads_05032026_204428_QVrV4idv :
 #' Metascope_reference_db.fasta
 #' Metascope_accessions_db.sqlite
 
@@ -53,8 +53,9 @@ download_RAD_data <- function(pipeline, species_list, download_location = fs::pa
   if (pipeline == "MetaScope") {
     #generate MetaScope files & save names
     reference_file_name <- download_MetaScope_reference(accessions_list, download_folder)
+    reference_dir_name <- separate_sequences(reference_file_name, download_folder)
     accession_file_name <- download_MetaScope_accessions(acc_list, download_folder)
-    file_paths <- c(reference_file_name, accession_file_name)
+    file_paths <- c(reference_file_name, accession_file_name, reference_dir_name)
   } else if (pipeline == "Kraken") {
     # download_Kraken_files(accessions_list)
     print("You chose Kraken")
@@ -78,7 +79,7 @@ download_RAD_data <- function(pipeline, species_list, download_location = fs::pa
 #' @export
 #'
 #' @examples
-#' download_MetaScope_reference(c("NZ_CTYB01000002.1","NZ_CTYB01000003.1"), ~/Users/user/Downloads/RAD_downloads_folder)
+#' download_MetaScope_reference(c("NZ_CTYB01000002.1","NZ_CTYB01000003.1"), /Users/user/Downloads/RAD_downloads_folder)
 #' > "Metascope_reference_db.fasta"
 
 download_MetaScope_reference <- function(accessions_list, download_folder) {
@@ -92,6 +93,16 @@ download_MetaScope_reference <- function(accessions_list, download_folder) {
 
   #use RADlib readSequences function to return selected sequences from RADlib
   sequences <- readSequences(RADlib_path, accessions_list)
+
+  # species_list <- get_species_list(accessions_list)
+  #
+  # print(length(species_list))
+  # print(length(accessions_list))
+  # print(length(sequences))
+  #
+  # if (length(species_list) == length(accessions_list)) {
+  #   print ("TRUE")
+  # }
 
   #use Biostrings to write fasta data for selected sequences to file
   writeXStringSet(sequences, file_path)
@@ -118,7 +129,7 @@ download_MetaScope_reference <- function(accessions_list, download_folder) {
 #' @export
 #'
 #' @examples
-#' download_MetaScope_accessions(c("NZ_CTYB01000002.1","NZ_CTYB01000003.1"), ~/Users/user/Downloads/RAD_downloads_folder)
+#' download_MetaScope_accessions(c("NZ_CTYB01000002.1","NZ_CTYB01000003.1"), /Users/user/Downloads/RAD_downloads_folder)
 #' > "Metascope_accessions_db.sqlite"
 
 download_MetaScope_accessions <- function(accessions_list, download_folder) {
@@ -174,6 +185,14 @@ download_MetaScope_accessions <- function(accessions_list, download_folder) {
 
   return (file_name)
 
+}
+
+separate_sequences <- function(reference_file_name, download_folder) {
+
+  folder_name <- "MetaScope_reference_dir"
+  file_path <- file.path(download_folder, folder_name)
+
+  return (folder_name)
 }
 
 # download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
