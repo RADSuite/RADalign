@@ -11,8 +11,8 @@ if (!dir.exists(data_dir)) dir.create(data_dir, recursive = TRUE)
 #' createRADq
 #'
 #' Given a list of species names, pull sequences for each species
-#' from RADlibV, align them, and return either a csv or csv and 
-#' dataframe containing a summary of which variable regions aligned 
+#' from RADlibV, align them, and return either a csv or csv and
+#' dataframe containing a summary of which variable regions aligned
 #' exactly, designated by a unique ID for each group.
 #'
 #' @param sequences a vector containing species names
