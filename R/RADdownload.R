@@ -21,7 +21,7 @@ library(Biostrings)
 #' Metascope_reference_db.fasta
 #' Metascope_accessions_db.sqlite
 
-download_RAD_data <- function(pipeline, species_list, download_location = fs::path_home("Downloads")) {
+download_RAD_data <- function(pipeline, species_list, filter_list = c(), download_location = fs::path_home("Downloads")) {
 
   #get accession ids for all species in species_list
   accessions_list <- get_accession_ids(species_list)
@@ -52,19 +52,33 @@ download_RAD_data <- function(pipeline, species_list, download_location = fs::pa
   #generate and download correct files based on pipeline
   if (pipeline == "MetaScope") {
     #generate MetaScope files & save names
-    reference_file_name <- download_MetaScope_reference(accessions_list, download_folder)
-    reference_dir_name <- separate_sequences(reference_file_name, download_folder)
-    accession_file_name <- download_MetaScope_accessions(acc_list, download_folder)
-    file_paths <- c(reference_file_name, accession_file_name, reference_dir_name)
+    reference_folder <- download_MetaScope_reference(accessions_list, download_folder)
+    accession_file <- download_MetaScope_accessions(acc_list, download_folder)
+    #generate MetaScope filter database if requested
+    if (length(filter_list) > 0) {
+      filter_accessions_list <- get_accession_ids(filter_list)
+      filter_folder <- download_MetaScope_reference(filter_accessions_list, download_folder, filter = TRUE)
+      file_paths <- c(accession_file, reference_folder$folder, filter_folder$folder)
+    } else {
+      file_paths <- c(accession_file, reference_folder$folder)
+    }
   } else if (pipeline == "Kraken") {
     # download_Kraken_files(accessions_list)
     print("You chose Kraken")
   }
 
   cat("Files downloaded successfully to", download_folder, ":\n")
-  cat(file_paths, sep = "\n")
+  if (pipeline == "MetaScope") {
+    cat(accession_file, "\n")
+    cat(reference_folder$folder, ":\n  ")
+    cat(unlist(reference_folder$files), sep = "\n  ")
+    if (length(filter_list) > 0) {
+      cat(filter_folder$folder, ":\n  ")
+      cat(unlist(filter_folder$files), sep = "\n  ")
+    }
+  }
 
-  return ()
+  return (download_folder)
 }
 
 #' download_MetaScope_reference
@@ -82,11 +96,24 @@ download_RAD_data <- function(pipeline, species_list, download_location = fs::pa
 #' download_MetaScope_reference(c("NZ_CTYB01000002.1","NZ_CTYB01000003.1"), /Users/user/Downloads/RAD_downloads_folder)
 #' > "Metascope_reference_db.fasta"
 
-download_MetaScope_reference <- function(accessions_list, download_folder) {
+download_MetaScope_reference <- function(accessions_list, download_folder, filter = FALSE) {
 
-  #file details
-  file_name = "Metascope_reference_db.fasta"
-  file_path = file.path(download_folder, file_name)
+  species_list <- get_species_list(accessions_list)
+
+  # #file details
+  # file_name = "Metascope_reference_db.fasta"
+  # file_path = file.path(download_folder, file_name)
+
+  #folder for sequence fastas
+  if (!filter) {
+    folder_name <- "MetaScope_reference_dir"
+  } else {
+    folder_name <- "MetaScope_filter_dir"
+  }
+  folder_path = file.path(download_folder, folder_name)
+  if (!dir.exists(folder_path)) {
+    dir.create(folder_path, recursive = TRUE)
+  }
 
   #get file path to RADlib
   RADlib_path <- system.file("extdata", "RADlib.fa", package = "RADalign")
@@ -94,18 +121,22 @@ download_MetaScope_reference <- function(accessions_list, download_folder) {
   #use RADlib readSequences function to return selected sequences from RADlib
   sequences <- readSequences(RADlib_path, accessions_list)
 
-  # species_list <- get_species_list(accessions_list)
-  #
-  # print(length(species_list))
-  # print(length(accessions_list))
-  # print(length(sequences))
-  #
-  # if (length(species_list) == length(accessions_list)) {
-  #   print ("TRUE")
-  # }
+  file_names <- vector("list", length(sequences))
+  for (i in seq_along(sequences)) {
+    # create file name
+    id <- accessions_list[i]
+    copy_num = regmatches(id, regexpr("[^\\.]+$", id))
+    species_name <- paste(unlist(strsplit(species_list[i], " ")), collapse = "_")
+    seq_file_name <- paste0(species_name, "_copy", copy_num, ".fasta")
+    seq_file_path <- file.path(folder_path, seq_file_name)
+
+    #use Biostrings to write fasta file for sequence, and save name
+    writeXStringSet(sequences[i], seq_file_path)
+    file_names[[i]] <- seq_file_name
+  }
 
   #use Biostrings to write fasta data for selected sequences to file
-  writeXStringSet(sequences, file_path)
+  # writeXStringSet(sequences, file_path)
 
   # if(file.info(file_path)$size > 0) {
   #   return (paste0("Download successful: ", file_name))
@@ -113,7 +144,8 @@ download_MetaScope_reference <- function(accessions_list, download_folder) {
   #   return ("Error writing file to ")
   # }
 
-  return (file_name)
+  # return (file_name)
+  return (list(folder = folder_name, files = file_names))
 
 }
 
@@ -187,15 +219,23 @@ download_MetaScope_accessions <- function(accessions_list, download_folder) {
 
 }
 
-separate_sequences <- function(reference_file_name, download_folder) {
+# separate_sequences <- function(reference_file_name, download_folder) {
+#
+#   folder_name <- "MetaScope_reference_dir"
+#   file_path <- file.path(download_folder, folder_name)
+#
+#   return (folder_name)
+# }
 
-  folder_name <- "MetaScope_reference_dir"
-  file_path <- file.path(download_folder, folder_name)
+# download_MetaScope_filter <- function(accessions_list, download_folder) {
+#
+#   filter_folder <- download_MetaScope_reference(accessions_list, download_folder, filter = TRUE)
+#   return(list(folder = filter_folder$folder, files = filter_folder$files))
+# }
 
-  return (folder_name)
-}
+# print(download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis")))
 
-# download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
+# print(download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"), c("Mycoplasma mobile", "Salmonella enterica")))
 
 # acc_list <- c("GCF_000006765.1.1", "GCF_000006765.1.2", "GCF_000006765.1.3", "GCF_000006765.1.4", "GCF_000007505.1.1", "GCF_000007505.1.2", "GCF_000007505.1.3")
 # print(download_MetaScope_reference(acc_list, "/Users/myeshagilliland/BYU/BIO465/RADalign"))
