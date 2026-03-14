@@ -7,6 +7,7 @@
 download_RAD_data(
   pipeline,
   species_list,
+  filter_list = c(),
   download_location = fs::path_home("Downloads")
 )
 }

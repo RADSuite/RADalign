@@ -260,7 +260,10 @@ createSummary <- function(IDs, return_df = FALSE) {
 # so the package will load correctly!
 
 # df <- createRADq(c("Pseudomonas aeruginosa"), TRUE)
-# groups <- createSummarizedIDs(TRUE)
+# createSummarizedIDs(TRUE)
+# createRADqGroups(c("V4","V5"), TRUE)
+
+
 # print(groups)
 # print(df)
 # df <- selectVRegions(c("V1","V5"), TRUE)

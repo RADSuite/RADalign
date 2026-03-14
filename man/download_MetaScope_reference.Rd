@@ -4,7 +4,7 @@
 \alias{download_MetaScope_reference}
 \title{download_MetaScope_reference}
 \usage{
-download_MetaScope_reference(accessions_list, download_folder)
+download_MetaScope_reference(accessions_list, download_folder, filter = FALSE)
 }
 \arguments{
 \item{accessions_list}{list of string accession ids of sequences to download from RADlib.}
