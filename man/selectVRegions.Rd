@@ -11,7 +11,7 @@ selectVRegions(vregions, return_df = FALSE)
 filtered file}
 
 \item{return_df}{a boolean indicating whether a dataframe
-containing the summary data should be returned in addition to the
+containing the data should be returned in addition to the
 csv created by default.}
 }
 \value{

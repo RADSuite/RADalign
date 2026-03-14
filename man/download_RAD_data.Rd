@@ -2,7 +2,7 @@
 % Please edit documentation in R/RADdownload.R
 \name{download_RAD_data}
 \alias{download_RAD_data}
-\title{download_RAD}
+\title{download_RAD_data}
 \usage{
 download_RAD_data(
   pipeline,
@@ -24,6 +24,8 @@ This function downloads a zipped folder to the user's working directory, and out
 This function allows users to download files for integration with analysis pipelines, currently supports MetaScope and Kraken.
 }
 \examples{
-download_RADsynch("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
-> "Downloaded Successfully to: ~/user/Downloads"
+download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
+> Files downloaded successfully to /Users/user/Downloads/RADdownloads_05032026_204428_QVrV4idv :
+Metascope_reference_db.fasta
+Metascope_accessions_db.sqlite
 }

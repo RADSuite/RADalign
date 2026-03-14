@@ -114,6 +114,17 @@ createSummarizedIDs <- function(return_df = FALSE) {
     if (return_df) return(as.data.frame(vregion_data))
 }
 
+createRADqGroups <- function(vregions, return_df = FALSE) {
+    infile <- file.path(data_dir, "RADq_summarized_IDs.csv")
+    if (!file.exists(infile)) {
+        print("RADq_summarized_IDs.csv not yet created")
+    }
+    data <- read.csv(infile)
+
+    data <- as_tibble(data) %>%
+    print()
+}
+
 #' getSequences
 #'
 #' Given a list of species, retrieves all sequences associated with
