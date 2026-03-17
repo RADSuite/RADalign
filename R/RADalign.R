@@ -104,16 +104,42 @@ createSummarizedIDs <- function(return_df = FALSE) {
     data <- read.csv(infile)
 
     data <- as_tibble(data)
-    vregion_data <- pivot_wider(data, names_from = variable_region, values_from = seq_id) %>%
+    vregion_data <- pivot_wider(data, names_from = variable_region, values_from = seq_id) %>% 
     group_by(species) %>%
-    summarize(across(starts_with("V"), ~ str_flatten(unique(na.omit(.x)), collapse = "")))
+    summarize(across(starts_with("V"), ~ {
+        unique_ids <- unique(na.omit(.x))
+        sorted <- sort(unique_ids)
+        str_flatten(sorted, collapse = "")
+    }))
 
     filepath <- file.path(data_dir, "RADq_summarized_IDs.csv")
     write.csv(vregion_data, filepath)
 
+
     if (return_df) return(as.data.frame(vregion_data))
 }
 
+#' createRADqGroups
+#'
+#' After createSummarizedIDs has been run, combines all summarized IDs
+#' and sorts taxa into groups that share all the same IDs for the given
+#' variable regions.
+#'
+#' @param vregions a vector containing all variable regions to be used
+#' to split the groups
+#' @param return_df a boolean indicating whether a dataframe
+#' containing the data should be returned in addition to the
+#' csv created by default.
+#'
+#' @return a dataframe containing the summary data when return_dataframe = TRUE
+#'
+#' @export
+#'
+#' @examples
+#' createRADqGroups(c("V4","V5"), TRUE)
+#'                     taxa    groups
+#' 1          Brucella suis    V41V51
+#' 2 Pseudomonas aeruginosa V42V52V53
 createRADqGroups <- function(vregions, return_df = FALSE) {
     infile <- file.path(data_dir, "RADq_summarized_IDs.csv")
     if (!file.exists(infile)) {
@@ -121,8 +147,33 @@ createRADqGroups <- function(vregions, return_df = FALSE) {
     }
     data <- read.csv(infile)
 
-    data <- as_tibble(data) %>%
-    print()
+    ids <- as_tibble(data) %>%
+    select(c(all_of(vregions))) %>%
+    unite("final_id", everything(), sep = "") %>%
+    pull(final_id)
+
+    groups <- split(seq_along(ids), ids)
+    taxa <- pull(data, species)
+
+    group_ids <- character()
+    for (i in seq_along(taxa)) {
+        for (group_id in names(groups)) {
+            group <- groups[[group_id]]
+            if (i %in% group) {
+                group_ids <- c(group_ids, group_id)
+            }
+        }
+    }
+
+    taxa_groups <- data.frame(
+        taxa = taxa,
+        groups = group_ids
+    )
+    
+    filepath <- file.path(data_dir, "RADq_groups.csv")
+    write.csv(taxa_groups, filepath)
+
+    if (return_df) return(taxa_groups)
 }
 
 #' getSequences
@@ -259,10 +310,9 @@ createSummary <- function(IDs, return_df = FALSE) {
 # note: remember to always comment out scratch code you're using for tests
 # so the package will load correctly!
 
-# df <- createRADq(c("Pseudomonas aeruginosa"), TRUE)
+# df <- createRADq(c("Pseudomonas aeruginosa", "Brucella suis"), TRUE)
 # createSummarizedIDs(TRUE)
 # createRADqGroups(c("V4","V5"), TRUE)
-
 
 # print(groups)
 # print(df)

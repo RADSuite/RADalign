@@ -2,6 +2,7 @@
 
 export(alignVRegions)
 export(createRADq)
+export(createRADqGroups)
 export(createSummarizedIDs)
 export(createSummary)
 export(download_MetaScope_accessions)
