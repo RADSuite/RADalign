@@ -16,7 +16,9 @@ list of accession ids (with copy numbers)
 Given a list of species, outputs accession ids
 }
 \examples{
-get_accession_ids(c("Pseudomonas aeruginosa", "Brucella suis"))
-[1] "GCF_000006765.1.1" "GCF_000006765.1.2" "GCF_000006765.1.3" "GCF_000006765.1.4"
-[5] "GCF_000007505.1.1" "GCF_000007505.1.2" "GCF_000007505.1.3"
+get_accession_ids(c("GCF_000006765.1.1", "GCF_000006765.1.2",
+"GCF_000006765.1.3", "GCF_000006765.1.4", "GCF_000007505.1.1",
+"GCF_000007505.1.2", "GCF_000007505.1.3"))
+[1] "Pseudomonas aeruginosa" "Pseudomonas aeruginosa" "Pseudomonas aeruginosa" "Pseudomonas aeruginosa"
+[5] "Brucella suis"          "Brucella suis"          "Brucella suis"
 }

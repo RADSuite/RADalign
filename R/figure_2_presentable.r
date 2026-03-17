@@ -3,9 +3,12 @@ library(rentrez)
 library(glue)
 library(tidyverse)
 
-ncbi_file <- RADlibV <- system.file("extdata", "bacteria.16SrRNA.fna", package = "RADalign")
+get_ncbi_file <- function() {
+  system.file("extdata", "bacteria.16SrRNA.fna", package = "RADalign")
+}
 
-
+create_figure_2 <- function() {
+  ncbi_file <- get_ncbi_file
 target_taxa <- c(
   "Bacillus cereus", "Bacteroides fragilis", "Escherichia coli",
   "Enterococcus faecalis", "Staphylococcus aureus"
@@ -56,5 +59,5 @@ figure2 <- as_tibble(data) %>%
     legend.title = element_text(size = 11),
     axis.text = element_text(size = 8)
   )
-
-print(figure2)
+  return(figure2)
+}
