@@ -1,14 +1,12 @@
-library(Biostrings)
 library(DBI)
 library(RSQLite)
 
 transform_accession_ids <- function(RADlib_path, RADacc_path) {
-
-  #get list of accession ids from RADlib
+  # get list of accession ids from RADlib
 
   # lines <- readLines(file_path)
-  index <- fasta.index(RADlib_path, seqtype = "DNA")
-  ids <- index$desc
+  index <- Biostrings::fasta.index(RADlib_path, seqtype = "DNA")
+  ids <- index[[desc]]
   # print(ids)
 
   con <- dbConnect(
@@ -19,16 +17,17 @@ transform_accession_ids <- function(RADlib_path, RADacc_path) {
   dbExecute(con, "CREATE TEMP TABLE acc_keys(original TEXT, trimmed TEXT)")
 
   for (id in ids) {
-    trimmed_id <- "test"
+    trimmed_id <- sub("^([^.]*\\.[^.]*)\\..*$", "\\1", id)
     dbExecute(con, "INSERT INTO acc_keys (original, trimmed) VALUES (?, ?)",
-    params = list(id, trimmed_id))
+      params = list(id, trimmed_id)
+    )
   }
 
   # successfully creating temp table and can use this command to print it; just need to implement trimming the ids
   dbGetQuery(con, "SELECT * FROM acc_keys") %>% print()
   dbDisconnect(con)
 
-  #connection to RADacc
+  # connection to RADacc
   # con <- dbConnect(
   #   RSQLite::SQLite(),
   #   dbname = RADacc_path
@@ -57,12 +56,11 @@ transform_accession_ids <- function(RADlib_path, RADacc_path) {
   # dbDisconnect(con)
 
 
-
   return("Done")
 }
 
 
-RADlib_file_path <- system.file("extdata", "RADlib.fa", package = "RADalign")
-RADacc_file_path <- system.file("extdata", "accessions.sqlite", package = "RADalign")
-#
-transform_accession_ids(RADlib_file_path, RADacc_file_path)
+# RADlib_file_path <- system.file("extdata", "RADlib.fa", package = "RADalign")
+# RADacc_file_path <- system.file("extdata", "accessions.sqlite", package = "RADalign")
+# #
+# transform_accession_ids(RADlib_file_path, RADacc_file_path)

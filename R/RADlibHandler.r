@@ -1,5 +1,3 @@
-library(Biostrings)
-
 #' readSequences
 #'
 #' Read in all sequences that include the given accession numbers in their
@@ -17,7 +15,7 @@ library(Biostrings)
 #' readSequences("/my/file/path", c("1234.1", "1234.2", "1234.3"))
 readSequences <- function(infile, accessions) {
     # create summary dataframe for database file
-    fasta_summary <- fasta.index(infile, seqtype = "DNA")
+    fasta_summary <- Biostrings::fasta.index(infile, seqtype = "DNA")
 
     # filter the indexes of the sequences that contain the accession numbers
     # names are stored in the "desc" column of the dataframe
@@ -25,7 +23,7 @@ readSequences <- function(infile, accessions) {
 
     # use matching indexes to read only desired sequences
     subset_index <- fasta_summary[matching_indexes, ]
-    readDNAStringSet(subset_index)
+    Biostrings::readDNAStringSet(subset_index)
 }
 
 #' getVRegions

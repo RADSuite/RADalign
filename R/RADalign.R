@@ -1,9 +1,4 @@
 # nolint start: line_length_linter
-library(Biostrings)
-library(msa)
-library(phangorn)
-library(tidyverse)
-
 # create the user data directory if it doesn't already exist
 data_dir <- tools::R_user_dir("RADalign", which = "data")
 if (!dir.exists(data_dir)) dir.create(data_dir, recursive = TRUE)
@@ -103,10 +98,10 @@ createSummarizedIDs <- function(return_df = FALSE) {
     }
     data <- read.csv(infile)
 
-    data <- as_tibble(data)
-    vregion_data <- pivot_wider(data, names_from = variable_region, values_from = seq_id) %>% 
-    group_by(species) %>%
-    summarize(across(starts_with("V"), ~ {
+    data <- tibble::as_tibble(data)
+    vregion_data <- tidyr::pivot_wider(data, names_from = variable_region, values_from = seq_id) %>% 
+    dplyr::group_by(species) %>%
+    dplyr::summarize(across(starts_with("V"), ~ {
         unique_ids <- unique(na.omit(.x))
         sorted <- sort(unique_ids)
         str_flatten(sorted, collapse = "")
@@ -147,13 +142,13 @@ createRADqGroups <- function(vregions, return_df = FALSE) {
     }
     data <- read.csv(infile)
 
-    ids <- as_tibble(data) %>%
-    select(c(all_of(vregions))) %>%
-    unite("final_id", everything(), sep = "") %>%
-    pull(final_id)
+    ids <- tibble::as_tibble(data) %>%
+    dplyr::select(c(all_of(vregions))) %>%
+    tidyr::unite("final_id", everything(), sep = "") %>%
+    dplyr::pull(final_id)
 
     groups <- split(seq_along(ids), ids)
-    taxa <- pull(data, species)
+    taxa <- dplyr::pull(data, species)
 
     group_ids <- character()
     for (i in seq_along(taxa)) {
@@ -199,6 +194,9 @@ createRADqGroups <- function(vregions, return_df = FALSE) {
 getSequences <- function(taxa) {
     accessions <- get_accession_ids(taxa)
     RADlibV <- system.file("extdata", "RADlibV.fa", package = "RADalign")
+    if (RADlibV == "") {
+        stop("Could not access RADlibV")
+    }
     sequences <- readSequences(RADlibV, accessions)
 }
 
@@ -212,6 +210,8 @@ getSequences <- function(taxa) {
 #' @return a list containing unique IDs for each group of exactly
 #' aligned sequences in each v-region
 #'
+#' @importFrom Biostrings DNAStringSet
+#' 
 #' @export
 #'
 #' @examples
@@ -230,7 +230,7 @@ alignVRegions <- function(sequences) {
     for (region in all_v_regions) {
         # get all sequences for region and perform msa
         region_sequences <- getVRegions(sequences, region)
-        alignment <- msa(region_sequences, method = "ClustalOmega")
+        alignment <- msa::msa(region_sequences, method = "ClustalOmega")
 
         # separate out groups of identical sequences
         alignment <- as(alignment, "DNAStringSet")
