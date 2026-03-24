@@ -14,6 +14,7 @@ Imports:
     dplyr,
     msa,
     tibble,
-    tidyr
+    tidyr,
+    data.table
 Depends: 
     tidyverse

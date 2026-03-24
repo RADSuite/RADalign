@@ -9,6 +9,8 @@ library(data.table)
 #'
 #' @return This function returns a callable df with two columns: species_name and accession_id
 #'
+#' @import data.table
+#'
 #' @export
 #'
 #' @examples
