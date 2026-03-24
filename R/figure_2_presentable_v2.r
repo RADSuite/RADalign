@@ -19,11 +19,11 @@ GREENGENE_URL <- "https://ftp.microbio.me/greengenes_release/current/2024.09.tax
 NCBI_URL <- "https://ftp.ncbi.nlm.nih.gov/refseq/TargetedLoci/Bacteria/bacteria.16SrRNA.fna.gz"
 RADLIB_URL <- "https://zenodo.org/records/19102712/files/RADlib16S.fa?download=1"
 
-# ---- Download Data ----
-silva_conn <- RCurl::getURL(SILVA_URL)
-greengene_conn <- RCurl::getURL(GREENGENE_URL)
-ncbi_conn <- RCurl::getURL(NCBI_URL)
-radlib_conn <- RCurl::getURL(RADLIB_URL)
+# # ---- Download Data ----
+# silva_conn <- RCurl::getURL(SILVA_URL)
+# greengene_conn <- RCurl::getURL(GREENGENE_URL)
+# ncbi_conn <- RCurl::getURL(NCBI_URL)
+# radlib_conn <- RCurl::getURL(RADLIB_URL)
 
 # TODO: replace read.data with function that actually reads the data (fasta etc.)
 # TODO: All db are probably gzipped so need step to use gzfile() to unzip data
