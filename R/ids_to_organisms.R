@@ -99,11 +99,11 @@ get_accession_ids <- function(organisms) {
   return (organisms)
 }
 
-# id_list <- c("AB6B37_RS01935", "THECO_RS17145", "FW767_RS11870")
-# org_list <- c("Fretibacter rubidus", "Thermobacillus composti KWC4", "Heminiphilus faecis")
-#
-# print(get_organisms(id_list))
-# print(get_ids(org_list))
+id_list <- c("AB6B37_RS01935", "THECO_RS17145", "FW767_RS11870")
+org_list <- c("Fretibacter rubidus", "Thermobacillus composti KWC4", "Heminiphilus faecis")
+
+print(get_species_list(id_list))
+print(get_accession_ids(org_list))
 
 # AB6B37_RS01935 taxid=570162 organism="Fretibacter rubidus"
 # THECO_RS17145 taxid=717605 organism="Thermobacillus composti KWC4"

@@ -25,16 +25,17 @@ download_RAD_data <- function(pipeline, species_list, filter_list = c(), downloa
 
   #get accession ids for all species in species_list
   accessions_list <- get_accession_ids(species_list)
+  # print(accessions_list)
 
   #just temporary while acc ids are different
-  acc_list <- c("NZ_CTYB01000002.1",
-               "NZ_CTYB01000003.1",
-               "NZ_CTYB01000004.1",
-               "NZ_LAWV01000006.1",
-               "NZ_LAWV01000007.1",
-               "NC_009641.1",
-               "NZ_JBBIAE010000011.1",
-               "NZ_JBBIAE010000012.1")
+  # acc_list <- c("NZ_CTYB01000002.1",
+  #              "NZ_CTYB01000003.1",
+  #              "NZ_CTYB01000004.1",
+  #              "NZ_LAWV01000006.1",
+  #              "NZ_LAWV01000007.1",
+  #              "NC_009641.1",
+  #              "NZ_JBBIAE010000011.1",
+  #              "NZ_JBBIAE010000012.1")
 
   #generate unique folder name
   rand_string <- paste0(sample(c(letters, LETTERS, 0:9), 8, replace = TRUE), collapse = "")
@@ -53,14 +54,17 @@ download_RAD_data <- function(pipeline, species_list, filter_list = c(), downloa
   if (pipeline == "MetaScope") {
     #generate MetaScope files & save names
     reference_folder <- download_MetaScope_reference(accessions_list, download_folder)
-    accession_file <- download_MetaScope_accessions(acc_list, download_folder)
+    # accession_file <- download_MetaScope_accessions(acc_list, download_folder)
+    # accession_file <- download_MetaScope_accessions(accessions_list, download_folder)
     #generate MetaScope filter database if requested
     if (length(filter_list) > 0) {
       filter_accessions_list <- get_accession_ids(filter_list)
       filter_folder <- download_MetaScope_reference(filter_accessions_list, download_folder, filter = TRUE)
-      file_paths <- c(accession_file, reference_folder$folder, filter_folder$folder)
+      # file_paths <- c(accession_file, reference_folder$folder, filter_folder$folder)
+      file_paths <- c(reference_folder$folder, filter_folder$folder)
     } else {
-      file_paths <- c(accession_file, reference_folder$folder)
+      # file_paths <- c(accession_file, reference_folder$folder)
+      file_paths <- c(reference_folder$folder)
     }
   } else if (pipeline == "Kraken") {
     # download_Kraken_files(accessions_list)
@@ -69,7 +73,7 @@ download_RAD_data <- function(pipeline, species_list, filter_list = c(), downloa
 
   cat("Files downloaded successfully to", download_folder, ":\n")
   if (pipeline == "MetaScope") {
-    cat(accession_file, "\n")
+    # cat(accession_file, "\n")
     cat(reference_folder$folder, ":\n  ")
     cat(unlist(reference_folder$files), sep = "\n  ")
     if (length(filter_list) > 0) {
@@ -99,6 +103,7 @@ download_RAD_data <- function(pipeline, species_list, filter_list = c(), downloa
 download_MetaScope_reference <- function(accessions_list, download_folder, filter = FALSE) {
 
   species_list <- get_species_list(accessions_list)
+  # print(species_list)
 
   # #file details
   # file_name = "Metascope_reference_db.fasta"
@@ -116,7 +121,7 @@ download_MetaScope_reference <- function(accessions_list, download_folder, filte
   }
 
   #get file path to RADlib
-  RADlib_path <- system.file("extdata", "RADlib.fa", package = "RADalign")
+  RADlib_path <- system.file("extdata", "RADlib16S.fa", package = "RADalign")
 
   #use RADlib readSequences function to return selected sequences from RADlib
   sequences <- readSequences(RADlib_path, accessions_list)
@@ -124,10 +129,15 @@ download_MetaScope_reference <- function(accessions_list, download_folder, filte
   file_names <- vector("list", length(sequences))
   for (i in seq_along(sequences)) {
     # create file name
+    # id <- accessions_list[i]
+    # copy_num = regmatches(id, regexpr("[^\\.]+$", id))
+    # species_name <- paste(unlist(strsplit(species_list[i], " ")), collapse = "_")
+    # seq_file_name <- paste0(species_name, "_copy", copy_num, ".fasta")
+    # seq_file_path <- file.path(folder_path, seq_file_name)
+
     id <- accessions_list[i]
-    copy_num = regmatches(id, regexpr("[^\\.]+$", id))
     species_name <- paste(unlist(strsplit(species_list[i], " ")), collapse = "_")
-    seq_file_name <- paste0(species_name, "_copy", copy_num, ".fasta")
+    seq_file_name <- paste0(species_name, "_", id, ".fasta")
     seq_file_path <- file.path(folder_path, seq_file_name)
 
     #use Biostrings to write fasta file for sequence, and save name
