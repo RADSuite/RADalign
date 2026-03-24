@@ -99,13 +99,34 @@ get_accession_ids <- function(organisms) {
   return (organisms)
 }
 
-id_list <- c("AB6B37_RS01935", "THECO_RS17145", "FW767_RS11870")
-org_list <- c("Fretibacter rubidus", "Thermobacillus composti KWC4", "Heminiphilus faecis")
-
-print(get_species_list(id_list))
-print(get_accession_ids(org_list))
+# id_list <- c("AB6B37_RS01935", "THECO_RS17145", "FW767_RS11870")
+# org_list <- c("Fretibacter rubidus", "Thermobacillus composti KWC4", "Heminiphilus faecis")
+#
+# print(get_species_list(id_list))
+# print(get_accession_ids(org_list))
 
 # AB6B37_RS01935 taxid=570162 organism="Fretibacter rubidus"
 # THECO_RS17145 taxid=717605 organism="Thermobacillus composti KWC4"
 # FW767_RS11870 taxid=2601703 organism="Heminiphilus faecis"
+
+
+#' get_all_organisms
+#'
+#' outputs all unique organisms in RADlib
+#'
+#' @return list of organism names
+#'
+#' @export
+#'
+#' @examples
+#' > head(get_all_organisms())
+#' [1] "Fretibacter rubidus"          "Enterobacter quasimori"       "Thermobacillus composti KWC4"
+#' [4] "Allofustis seminis DSM 15817" "Heminiphilus faecis"          "Algirhabdus cladophorae"
+
+get_all_organisms <- function() {
+  accessions <- get_accessions_df()
+  return(unique(accessions$organism))
+}
+
+# print(head(get_all_organisms()))
 
