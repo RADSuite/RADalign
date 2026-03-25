@@ -42,15 +42,27 @@ readSequences <- function(infile, accessions) {
 #' @examples
 #' ## getVRegions(my_string_set, c("V1", "V2"))
 getVRegions <- function(sequences, vregions) {
-    sequences[grepl(paste(vregions, collapse = "|"), names(sequences))]
+    # rename vregions so they match format of finalized RADlibVR
+    renamed_regions <- character()
+    tag <- "variable_region="
+    for (region in vregions) {
+        region <- substring(region, 2)
+        region <- paste0(tag, region)
+        renamed_regions <- c(renamed_regions, region)
+    }
+    renamed_regions <- sort(renamed_regions)
+
+    sequences[grepl(paste(renamed_regions, collapse = "|"), names(sequences))]
 }
 
 
 # testing scratch
 
-# radv_file <- "C:/Users/rache/OneDrive/Desktop/Capstone/RADalign/inst/extdata/RADlibV.fa"
-# wanted <- c("GCF_000006765.1.1")
-# filtered <- readSequences(radv_file, wanted)
-# wanted <- c("V1", "V2")
-# filtered_vregions <- getVRegions(filtered, wanted)
-# print(filtered_vregions)
+radv_file <- "C:/Users/rache/OneDrive/Desktop/Capstone/RADalign/inst/extdata/RADlibVR.fa"
+wanted <- c("IW245_RS23890")
+filtered <- readSequences(radv_file, wanted)
+print(filtered)
+
+wanted <- c("V2", "V1")
+filtered_vregions <- getVRegions(filtered, wanted)
+print(filtered_vregions)
