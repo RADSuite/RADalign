@@ -193,11 +193,11 @@ createRADqGroups <- function(vregions, return_df = FALSE) {
 #' 36 Pseudomonas aeruginosa              V9        4    V91
 getSequences <- function(taxa) {
     accessions <- get_accession_ids(taxa)
-    RADlibV <- system.file("extdata", "RADlibV.fa", package = "RADalign")
+    RADlibV <- system.file("extdata", "RADlibVR.fa", package = "RADalign")
     if (RADlibV == "") {
         stop("Could not access RADlibV")
     }
-    sequences <- readSequences(RADlibV, accessions)
+    sequences <- readSequences(RADlibV, taxa)
 }
 
 #' alignVRegions
