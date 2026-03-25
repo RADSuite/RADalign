@@ -21,13 +21,12 @@ if (!dir.exists(data_dir)) dir.create(data_dir, recursive = TRUE)
 #'
 #' @examples
 #' createRADq(c("Pseudomonas aeruginosa"), TRUE)
-#' createSummary(IDs, TRUE)
-#'                   species variable_region copy_num seq_id
-#' 1  Pseudomonas aeruginosa              V1        1    V11
-#' 2  Pseudomonas aeruginosa              V1        2    V11
+#'                        species variable_region    copy_id seq_id
+#' 1  Pseudomonas aeruginosa PAO1              V1   PA0668.1    V11
+#' 2  Pseudomonas aeruginosa PAO1              V1   PA4280.5    V11
 #' ...
-#' 35 Pseudomonas aeruginosa              V9        3    V91
-#' 36 Pseudomonas aeruginosa              V9        4    V91
+#' 62 Pseudomonas aeruginosa PAO1              V9   PA4690.5    V92
+#' 63 Pseudomonas aeruginosa PAO1              V9   PA5369.5    V92
 createRADq <- function(species_list, return_dataframe = FALSE) {
     sequences <- getSequences(species_list)
     IDs <- alignVRegions(sequences)
@@ -50,16 +49,22 @@ createRADq <- function(species_list, return_dataframe = FALSE) {
 #' @export
 #'
 #' @examples
-#' selectVRegions(c("V1", "V5"))
-#'    X                species variable_region copy_num seq_id
-# 1   1 Pseudomonas aeruginosa              V1        1    V11
-# 2   2 Pseudomonas aeruginosa              V1        2    V11
-# 3   3 Pseudomonas aeruginosa              V1        3    V11
-# 4   4 Pseudomonas aeruginosa              V1        4    V11
-# 17 17 Pseudomonas aeruginosa              V5        3    V51
-# 18 18 Pseudomonas aeruginosa              V5        4    V51
-# 19 19 Pseudomonas aeruginosa              V5        1    V52
-# 20 20 Pseudomonas aeruginosa              V5        2    V52
+#' selectVRegions(c("V1","V5"))
+#'     X                     species variable_region    copy_id seq_id
+#' 1   1 Pseudomonas aeruginosa PAO1              V1   PA0668.1    V11
+#' 2   2 Pseudomonas aeruginosa PAO1              V1   PA4280.5    V11
+#' 3   3 Pseudomonas aeruginosa PAO1              V1   PA4690.5    V11
+#' 4   4 Pseudomonas aeruginosa PAO1              V1   PA5369.5    V11
+#' 5   5          Brucella suis 1330              V1 BR_RS07585    V12
+#' 6   6          Brucella suis 1330              V1 BR_RS08575    V12
+#' 7   7          Brucella suis 1330              V1 BR_RS15325    V12
+#' 29 29          Brucella suis 1330              V5 BR_RS07585    V51
+#' 30 30          Brucella suis 1330              V5 BR_RS08575    V51
+#' 31 31          Brucella suis 1330              V5 BR_RS15325    V51
+#' 32 32 Pseudomonas aeruginosa PAO1              V5   PA4690.5    V52
+#' 33 33 Pseudomonas aeruginosa PAO1              V5   PA5369.5    V52
+#' 34 34 Pseudomonas aeruginosa PAO1              V5   PA0668.1    V53
+#' 35 35 Pseudomonas aeruginosa PAO1              V5   PA4280.5    V53
 selectVRegions <- function(vregions, return_df = FALSE) {
     infile <- file.path(data_dir, "RADq.csv")
     if (!file.exists(infile)) {
@@ -314,13 +319,12 @@ createSummary <- function(IDs, return_df = FALSE) {
 # note: remember to always comment out scratch code you're using for tests
 # so the package will load correctly!
 
-df <- createRADq(c("Pseudomonas aeruginosa", "Brucella suis"), TRUE)
+# df <- createRADq(c("Pseudomonas aeruginosa", "Brucella suis"), TRUE)
 # createSummarizedIDs(TRUE)
 # createRADqGroups(c("V4","V5"), TRUE)
 
-# print(groups)
-# print(df)
 # df <- selectVRegions(c("V1","V5"), TRUE)
+# print(df)
 
 
 # This is still useful code, but a full distance calculation is more than

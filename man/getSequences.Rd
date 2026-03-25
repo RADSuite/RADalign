@@ -18,11 +18,11 @@ Given a list of species, retrieves all sequences associated with
 those taxa from RADlibV.
 }
 \examples{
-createRADq(c("Pseudomonas aeruginosa"), TRUE)
-                  species variable_region copy_num seq_id
-1  Pseudomonas aeruginosa              V1        1    V11
-2  Pseudomonas aeruginosa              V1        2    V11
-...
-35 Pseudomonas aeruginosa              V9        3    V91
-36 Pseudomonas aeruginosa              V9        4    V91
+getSequences(c("Longispora fulva"))
+DNAStringSet object of length 36:
+     width seq                                              names
+ [1]    21 GAAAGGCCCTTCGGGGTACTC                            IW245_RS23890 tax...
+ [2]   107 CTTGGCTTCGGGATAACCATCGG...GCCAGGGATGGGCTCGCGGCCT IW245_RS23890 tax...
+ ...   ... ...
+[36]    33 GCCGGTGGCCCAACCCGTAAGGGAGGGAGCCGT                IW245_RS40075 tax...
 }

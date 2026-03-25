@@ -20,10 +20,14 @@ V-region individually
 \examples{
 alignVRegions(sequences)
 $V11
-[1] "GCF_000006765.1.1__V1" "GCF_000006765.1.2__V1" "GCF_000006765.1.3__V1"
-[4] "GCF_000006765.1.4__V1"
+[1] "IW245_RS23890 taxid=619741 organism=\"Longispora fulva\" variable_region=1"
+[2] "IW245_RS27830 taxid=619741 organism=\"Longispora fulva\" variable_region=1"
+[3] "IW245_RS37080 taxid=619741 organism=\"Longispora fulva\" variable_region=1"
+[4] "IW245_RS40075 taxid=619741 organism=\"Longispora fulva\" variable_region=1"
 ...
 $V91
-[1] "GCF_000006765.1.1__V9" "GCF_000006765.1.2__V9" "GCF_000006765.1.3__V9"
-[4] "GCF_000006765.1.4__V9"
+[1] "IW245_RS23890 taxid=619741 organism=\"Longispora fulva\" variable_region=9"
+[2] "IW245_RS27830 taxid=619741 organism=\"Longispora fulva\" variable_region=9"
+[3] "IW245_RS37080 taxid=619741 organism=\"Longispora fulva\" variable_region=9"
+[4] "IW245_RS40075 taxid=619741 organism=\"Longispora fulva\" variable_region=9"
 }
