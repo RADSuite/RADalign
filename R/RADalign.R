@@ -184,15 +184,14 @@ createRADqGroups <- function(vregions, return_df = FALSE) {
 #' @export
 #'
 #' @examples
-#' createRADq(c("Pseudomonas aeruginosa"), TRUE)
-#'                   species variable_region copy_num seq_id
-#' 1  Pseudomonas aeruginosa              V1        1    V11
-#' 2  Pseudomonas aeruginosa              V1        2    V11
-#' ...
-#' 35 Pseudomonas aeruginosa              V9        3    V91
-#' 36 Pseudomonas aeruginosa              V9        4    V91
+#' getSequences(c("Longispora fulva"))
+#' DNAStringSet object of length 36:
+#'      width seq                                              names
+#'  [1]    21 GAAAGGCCCTTCGGGGTACTC                            IW245_RS23890 tax...
+#'  [2]   107 CTTGGCTTCGGGATAACCATCGG...GCCAGGGATGGGCTCGCGGCCT IW245_RS23890 tax...
+#'  ...   ... ...
+#' [36]    33 GCCGGTGGCCCAACCCGTAAGGGAGGGAGCCGT                IW245_RS40075 tax...
 getSequences <- function(taxa) {
-    accessions <- get_accession_ids(taxa)
     RADlibV <- system.file("extdata", "RADlibVR.fa", package = "RADalign")
     if (RADlibV == "") {
         stop("Could not access RADlibV")
@@ -217,12 +216,16 @@ getSequences <- function(taxa) {
 #' @examples
 #' alignVRegions(sequences)
 #' $V11
-#' [1] "GCF_000006765.1.1__V1" "GCF_000006765.1.2__V1" "GCF_000006765.1.3__V1"
-#' [4] "GCF_000006765.1.4__V1"
+#' [1] "IW245_RS23890 taxid=619741 organism=\"Longispora fulva\" variable_region=1"
+#' [2] "IW245_RS27830 taxid=619741 organism=\"Longispora fulva\" variable_region=1"
+#' [3] "IW245_RS37080 taxid=619741 organism=\"Longispora fulva\" variable_region=1"
+#' [4] "IW245_RS40075 taxid=619741 organism=\"Longispora fulva\" variable_region=1"
 #' ...
 #' $V91
-#' [1] "GCF_000006765.1.1__V9" "GCF_000006765.1.2__V9" "GCF_000006765.1.3__V9"
-#' [4] "GCF_000006765.1.4__V9"
+#' [1] "IW245_RS23890 taxid=619741 organism=\"Longispora fulva\" variable_region=9"
+#' [2] "IW245_RS27830 taxid=619741 organism=\"Longispora fulva\" variable_region=9"
+#' [3] "IW245_RS37080 taxid=619741 organism=\"Longispora fulva\" variable_region=9"
+#' [4] "IW245_RS40075 taxid=619741 organism=\"Longispora fulva\" variable_region=9"
 alignVRegions <- function(sequences) {
     IDs <- list()
     all_v_regions <- c("V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9")
@@ -263,17 +266,17 @@ alignVRegions <- function(sequences) {
 #'
 #' @examples
 #' createSummary(IDs, TRUE)
-#'                   species variable_region copy_num seq_id
-#' 1  Pseudomonas aeruginosa              V1        1    V11
-#' 2  Pseudomonas aeruginosa              V1        2    V11
+#'                        species variable_region    copy_id seq_id
+#' 1  Pseudomonas aeruginosa PAO1              V1   PA0668.1    V11
+#' 2  Pseudomonas aeruginosa PAO1              V1   PA4280.5    V11
 #' ...
-#' 35 Pseudomonas aeruginosa              V9        3    V91
-#' 36 Pseudomonas aeruginosa              V9        4    V91
+#' 62 Pseudomonas aeruginosa PAO1              V9   PA4690.5    V92
+#' 63 Pseudomonas aeruginosa PAO1              V9   PA5369.5    V92
 createSummary <- function(IDs, return_df = FALSE) {
     # use vectors to retrieve and sort individual pieces of information from ID list
     species_vec <- character()
     region_vec <- character()
-    copy_num_vec <- character()
+    copy_id_vec <- character()
     seq_id_vec <- character()
     for (i in seq_along(IDs)) {
         group <- IDs[i]
@@ -283,13 +286,14 @@ createSummary <- function(IDs, return_df = FALSE) {
         seq_list <- IDs[[i]]
         accessions_df <- get_accessions_df()
         for (j in seq_along(seq_list)) {
-            copy_n <- sub("^[^.]*\\.[^.]*\\.([^_]*).*", "\\1", seq_list[j])
-            accession_num <- sub("^(([^_]*_){1}[^_]*)_.*", "\\1", seq_list[j])
-            species <- accessions_df$species_name[accessions_df$accession_id == accession_num]
+            capture_pattern = "^([^ ]+).*organism=\"([^\"]+)"
+            matches = str_match(seq_list[j], capture_pattern)
+            copy_id <- matches[2]
+            species <- matches[3]
 
             species_vec <- c(species_vec, species)
             region_vec <- c(region_vec, region)
-            copy_num_vec <- c(copy_num_vec, copy_n)
+            copy_id_vec <- c(copy_id_vec, copy_id)
             seq_id_vec <- c(seq_id_vec, id)
         }
     }
@@ -297,7 +301,7 @@ createSummary <- function(IDs, return_df = FALSE) {
     # create dataframe using sorted information
     full_summary <- data.frame(
         species = species_vec, variable_region = region_vec,
-        copy_num = copy_num_vec, seq_id = seq_id_vec
+        copy_id = copy_id_vec, seq_id = seq_id_vec
     )
 
     # create csv from dataframe
@@ -310,7 +314,7 @@ createSummary <- function(IDs, return_df = FALSE) {
 # note: remember to always comment out scratch code you're using for tests
 # so the package will load correctly!
 
-# df <- createRADq(c("Pseudomonas aeruginosa", "Brucella suis"), TRUE)
+df <- createRADq(c("Pseudomonas aeruginosa", "Brucella suis"), TRUE)
 # createSummarizedIDs(TRUE)
 # createRADqGroups(c("V4","V5"), TRUE)
 
