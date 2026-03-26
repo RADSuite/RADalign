@@ -1,6 +1,3 @@
-library(stringi)
-library(data.table)
-
 # accessions_loaded <- FALSE
 
 #' get_accessions_df

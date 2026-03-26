@@ -15,6 +15,7 @@ Imports:
     msa,
     tibble,
     tidyr,
-    data.table
+    data.table,
+    stringi
 Depends: 
     tidyverse

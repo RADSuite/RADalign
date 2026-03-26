@@ -14,6 +14,7 @@ outputs all unique organisms in RADlib
 }
 \examples{
 > head(get_all_organisms())
-[1] "Fretibacter rubidus"          "Enterobacter quasimori"       "Thermobacillus composti KWC4"
-[4] "Allofustis seminis DSM 15817" "Heminiphilus faecis"          "Algirhabdus cladophorae"
+[1] ""                                                     " - All Species"
+[3] "'Nostoc - All Species"                                "'Nostoc azollae' 0708"
+[5] "[Acidovorax] - All Species"                           "[Acidovorax] ebreus TPSY"
 }
