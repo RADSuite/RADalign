@@ -32,6 +32,7 @@ get_accessions_df <- function() {
   gene_id <- stringi::stri_split_fixed(labels[,1], " ", simplify = TRUE)[,1]
   taxa_id <- stringi::stri_split_fixed(labels[,2], " ", simplify = TRUE)[,1]
   organism_name <- stringi::stri_split_fixed(labels[,3], "\"", simplify = TRUE)[,2]
+  genus_name <- stri_split_fixed(organism_name, " ", simplify = TRUE)[,1]
 
   #create empty accessions
   n <- length(headers)
