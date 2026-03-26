@@ -90,3 +90,5 @@ read_count_table <- sort(table(genome_name_all), decreasing = TRUE)
 knitr::kable(
   read_count_table[1:10],
   col.names = c("Genome Assigned", "Read Count"))
+
+# "/Users/myeshagilliland/BYU/BIO465/RADdownloads/metascope_rad_test"

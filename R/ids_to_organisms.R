@@ -114,7 +114,7 @@ get_accession_ids <- function(organisms) {
 
   accessions <- get_accessions_df()
   # organisms <- accessions[organism %in% organisms, id]
-  organisms <- accessions[.(organism), on = .(organisms), id]
+  organisms <- accessions[.(organisms), on = .(organism), id]
 
   return (organisms)
 }
