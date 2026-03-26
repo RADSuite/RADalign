@@ -120,12 +120,19 @@ get_accession_ids <- function(organisms) {
 #'
 #' @examples
 #' > head(get_all_organisms())
-#' [1] "Fretibacter rubidus"          "Enterobacter quasimori"       "Thermobacillus composti KWC4"
-#' [4] "Allofustis seminis DSM 15817" "Heminiphilus faecis"          "Algirhabdus cladophorae"
+#' [1] ""                                                     " - All Species"
+#' [3] "'Nostoc - All Species"                                "'Nostoc azollae' 0708"
+#' [5] "[Acidovorax] - All Species"                           "[Acidovorax] ebreus TPSY"
 
 get_all_organisms <- function() {
   accessions <- get_accessions_df()
-  return(unique(accessions$organism))
+  organism_list <- unique(accessions$organism)
+  genus_list <- unique(accessions$genus)
+  genus_labels <- paste0(genus_list, " - All Species")
+
+  full_list <- stringi::stri_sort(append(genus_labels, organism_list))
+
+  return(full_list)
 }
 
 # print(head(get_all_organisms()))
