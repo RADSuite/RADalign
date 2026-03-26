@@ -42,10 +42,27 @@ get_accessions_df <- function() {
   accessions[, id := gene_id]
   accessions[, taxid := taxa_id]
   accessions[, organism := organism_name]
+  accessions[, genus := genus_name]
+
+  # print(head(accessions, 40))
+  #
+  # #filter out empty (unamed / node not leaf sequences) and bracketed (under review) organism names
+  # first_correct_indx <- accessions[substr(organism_name, 1, 1) == "A", which = TRUE][1]
+  # accessions <- accessions[-(1:(first_correct_indx + 1)), ]
+  #
+  # print(head(accessions, 40))
+
+  # for (i in length(headers)) {
+  #   if (length()) {
+  #
+  #   }
+  # }
 
   return (accessions)
 
 }
+
+get_accessions_df()
 
 #' get_species_list
 #'
@@ -135,6 +152,18 @@ get_all_organisms <- function() {
 
   return(full_list)
 }
+
+# get_genus_to_species <- function() {
+#   accessions <- get_accessions_df()
+#   genus_list <- unique(accessions$genus)
+#
+#   # accessions[genus_name %in% genus, organism]
+#
+#   genus_organism_df <- data.table(genus_name = genus_list)
+#   genus_organism_df[, organism_names := lapply(genus_name, accessions[genus_name %in% genus, organism])]
+#
+#   return(genus_organism_df)
+# }
 
 # print(head(get_all_organisms()))
 
