@@ -87,7 +87,8 @@ get_species_list <- function(ids) {
   # }
 
   accessions <- get_accessions_df()
-  organisms <- accessions[id %in% ids, organism]
+  # organisms <- accessions[id %in% ids, organism]
+  organisms <- accessions[.(ids), on = .(id), organism]
 
   return (organisms)
 }
@@ -112,7 +113,8 @@ get_species_list <- function(ids) {
 get_accession_ids <- function(organisms) {
 
   accessions <- get_accessions_df()
-  organisms <- accessions[organism %in% organisms, id]
+  # organisms <- accessions[organism %in% organisms, id]
+  organisms <- accessions[.(organism), on = .(organisms), id]
 
   return (organisms)
 }
