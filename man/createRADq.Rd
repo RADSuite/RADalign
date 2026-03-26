@@ -24,11 +24,10 @@ exactly, designated by a unique ID for each group.
 }
 \examples{
 createRADq(c("Pseudomonas aeruginosa"), TRUE)
-createSummary(IDs, TRUE)
-                  species variable_region copy_num seq_id
-1  Pseudomonas aeruginosa              V1        1    V11
-2  Pseudomonas aeruginosa              V1        2    V11
+                       species variable_region    copy_id seq_id
+1  Pseudomonas aeruginosa PAO1              V1   PA0668.1    V11
+2  Pseudomonas aeruginosa PAO1              V1   PA4280.5    V11
 ...
-35 Pseudomonas aeruginosa              V9        3    V91
-36 Pseudomonas aeruginosa              V9        4    V91
+62 Pseudomonas aeruginosa PAO1              V9   PA4690.5    V92
+63 Pseudomonas aeruginosa PAO1              V9   PA5369.5    V92
 }
