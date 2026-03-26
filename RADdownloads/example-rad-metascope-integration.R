@@ -3,12 +3,12 @@ library("MetaScope")
 target_ref_temp <- tempfile()
 dir.create(target_ref_temp)
 dir.create("tmp")
-dir.creat("filter_tmp")
+dir.create("filter_tmp")
 dir.create("out")
 dir.create("refdata")
 
 # ---- This portion starts at 5 of the MetaScope tutorial ----
-# Starting at part 5 of the "tutorial"Introduction to MetaScope" vignette 
+# Starting at part 5 of the "tutorial"Introduction to MetaScope" vignette
 # Using download_accessions() isn't needed for us. I'm pretty sure we are replacing
 # every taxonomizr portion with our stuff
 
@@ -27,7 +27,7 @@ mk_bowtie_index(
   overwrite = T)
 
 # ---- Filter indecies (These are the taxa we don't want to id) ----
-# Another filtered RADlib the researchers don't think they'll find? 
+# Another filtered RADlib the researchers don't think they'll find?
 # I'm guessing if taxa X doen't live in a microbiome having it the search pool my
 # be added noise? This might be a talk to Dr. J moment/YouTube
 # mk_bowtie_index(
@@ -70,14 +70,25 @@ aln <- Rsamtools::scanBam(bamFile, param = param)
 accession_all <- aln[[1]]$rname
 
 # TODO: Needs to do RAD stuff
-# This maps the accessions used (for us it is the gene tag, not an accession) 
+# This maps the accessions used (for us it is the gene tag, not an accession)
 # to a an organism/taxa
-# genome_name_all <- accession_all |> 
+# genome_name_all <- accession_all |>
 #   taxonomizr::accessionToTaxa(tmp_accession) |>
 #   taxonomizr::getTaxonomy(sqlFile = tmp_accession, desiredTaxa = "strain")
 
+# below change to genome_name_all, fix genome_name_all function to use our functions
+genome_name_all <- get_species_list(accession_all)
+
 # Create counts table and show the top hit taxa/gene tags
-read_count_table <- sort(table(accession_all), decreasing = TRUE)
+# read_count_table <- sort(table(accession_all), decreasing = TRUE)
+# knitr::kable(
+#   read_count_table[1:10],
+#   col.names = c("Genome Assigned", "Read Count"))
+
+# Create counts table and show the top hit taxa/gene tags
+read_count_table <- sort(table(genome_name_all), decreasing = TRUE)
 knitr::kable(
   read_count_table[1:10],
   col.names = c("Genome Assigned", "Read Count"))
+
+# "/Users/myeshagilliland/BYU/BIO465/RADdownloads/metascope_rad_test"

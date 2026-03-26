@@ -28,10 +28,11 @@ get_accessions_df <- function() {
   headers <- index[["desc"]] # remember to change this code for download functions now that header has changed
 
   # get data from headers
-  labels <- stri_split_fixed(headers, "=", simplify = TRUE)
-  gene_id <- stri_split_fixed(labels[,1], " ", simplify = TRUE)[,1]
-  taxa_id <- stri_split_fixed(labels[,2], " ", simplify = TRUE)[,1]
-  organism_name <- stri_split_fixed(labels[,3], "\"", simplify = TRUE)[,2]
+  labels <- stringi::stri_split_fixed(headers, "=", simplify = TRUE)
+  gene_id <- stringi::stri_split_fixed(labels[,1], " ", simplify = TRUE)[,1]
+  taxa_id <- stringi::stri_split_fixed(labels[,2], " ", simplify = TRUE)[,1]
+  organism_name <- stringi::stri_split_fixed(labels[,3], "\"", simplify = TRUE)[,2]
+  genus_name <- stringi::stri_split_fixed(organism_name, " ", simplify = TRUE)[,1]
 
   #create empty accessions
   n <- length(headers)
@@ -41,10 +42,27 @@ get_accessions_df <- function() {
   accessions[, id := gene_id]
   accessions[, taxid := taxa_id]
   accessions[, organism := organism_name]
+  accessions[, genus := genus_name]
+
+  # print(head(accessions, 40))
+  #
+  # #filter out empty (unamed / node not leaf sequences) and bracketed (under review) organism names
+  # first_correct_indx <- accessions[substr(organism_name, 1, 1) == "A", which = TRUE][1]
+  # accessions <- accessions[-(1:(first_correct_indx + 1)), ]
+  #
+  # print(head(accessions, 40))
+
+  # for (i in length(headers)) {
+  #   if (length()) {
+  #
+  #   }
+  # }
 
   return (accessions)
 
 }
+
+get_accessions_df()
 
 #' get_species_list
 #'
@@ -69,7 +87,8 @@ get_species_list <- function(ids) {
   # }
 
   accessions <- get_accessions_df()
-  organisms <- accessions[id %in% ids, organism]
+  # organisms <- accessions[id %in% ids, organism]
+  organisms <- accessions[.(ids), on = .(id), organism]
 
   return (organisms)
 }
@@ -94,7 +113,8 @@ get_species_list <- function(ids) {
 get_accession_ids <- function(organisms) {
 
   accessions <- get_accessions_df()
-  organisms <- accessions[organism %in% organisms, id]
+  # organisms <- accessions[organism %in% organisms, id]
+  organisms <- accessions[.(organisms), on = .(organism), id]
 
   return (organisms)
 }
@@ -120,13 +140,32 @@ get_accession_ids <- function(organisms) {
 #'
 #' @examples
 #' > head(get_all_organisms())
-#' [1] "Fretibacter rubidus"          "Enterobacter quasimori"       "Thermobacillus composti KWC4"
-#' [4] "Allofustis seminis DSM 15817" "Heminiphilus faecis"          "Algirhabdus cladophorae"
+#' [1] ""                                                     " - All Species"
+#' [3] "'Nostoc - All Species"                                "'Nostoc azollae' 0708"
+#' [5] "[Acidovorax] - All Species"                           "[Acidovorax] ebreus TPSY"
 
 get_all_organisms <- function() {
   accessions <- get_accessions_df()
-  return(unique(accessions$organism))
+  organism_list <- unique(accessions$organism)
+  genus_list <- unique(accessions$genus)
+  genus_labels <- paste0(genus_list, " - All Species")
+
+  full_list <- stringi::stri_sort(append(genus_labels, organism_list))
+
+  return(full_list)
 }
+
+# get_genus_to_species <- function() {
+#   accessions <- get_accessions_df()
+#   genus_list <- unique(accessions$genus)
+#
+#   # accessions[genus_name %in% genus, organism]
+#
+#   genus_organism_df <- data.table(genus_name = genus_list)
+#   genus_organism_df[, organism_names := lapply(genus_name, accessions[genus_name %in% genus, organism])]
+#
+#   return(genus_organism_df)
+# }
 
 # print(head(get_all_organisms()))
 

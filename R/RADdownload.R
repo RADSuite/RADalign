@@ -243,6 +243,14 @@ download_MetaScope_accessions <- function(accessions_list, download_folder) {
 #   return(list(folder = filter_folder$folder, files = filter_folder$files))
 # }
 
+# my_species <- c("Prevotella jejuni", "Faecalibacterium langellae","Prevotella intermedia ATCC 25611",
+# "Porphyromonas gingivalis ATCC 33277", "Segatella oris", "Veillonella hominis",
+# "Eggerthia catenaformis OT 569", "Capnocytophaga ochracea DSM 7271",
+# "Corynebacterium matruchotii ATCC 14266", "Leptotrichia wadei")
+#
+# download_RAD_data("MetaScope", my_species)
+
+
 # print(download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis")))
 
 # print(download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"), c("Mycoplasma mobile", "Salmonella enterica")))
