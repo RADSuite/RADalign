@@ -28,10 +28,10 @@ get_accessions_df <- function() {
   headers <- index[["desc"]] # remember to change this code for download functions now that header has changed
 
   # get data from headers
-  labels <- stri_split_fixed(headers, "=", simplify = TRUE)
-  gene_id <- stri_split_fixed(labels[,1], " ", simplify = TRUE)[,1]
-  taxa_id <- stri_split_fixed(labels[,2], " ", simplify = TRUE)[,1]
-  organism_name <- stri_split_fixed(labels[,3], "\"", simplify = TRUE)[,2]
+  labels <- stringi::stri_split_fixed(headers, "=", simplify = TRUE)
+  gene_id <- stringi::stri_split_fixed(labels[,1], " ", simplify = TRUE)[,1]
+  taxa_id <- stringi::stri_split_fixed(labels[,2], " ", simplify = TRUE)[,1]
+  organism_name <- stringi::stri_split_fixed(labels[,3], "\"", simplify = TRUE)[,2]
 
   #create empty accessions
   n <- length(headers)
