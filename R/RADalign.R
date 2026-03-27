@@ -252,7 +252,6 @@ alignVRegions <- function(sequences) {
     }
     return(IDs)
 }
-# createRADq(c("Pseudomonas aeruginosa PAO1"), TRUE)
 
 #' createSummary
 #'
