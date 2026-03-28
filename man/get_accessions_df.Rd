@@ -14,17 +14,9 @@ This function generates a callable df with two columns: species_name and accessi
 }
 \examples{
 get_accessions_df()
-id                      taxid                                      organism                  genus
-<char>                 <char>                                        <char>                 <char>
-1:  B1R32_RS16185     1960156                   Abditibacterium utsteinense        Abditibacterium
-2:  FOC79_RS03980       46125                         Abiotrophia defectiva            Abiotrophia
-3:  FOC79_RS04670       46125                         Abiotrophia defectiva            Abiotrophia
-4:  FOC79_RS05530       46125                         Abiotrophia defectiva            Abiotrophia
-5:  FOC79_RS06060       46125                         Abiotrophia defectiva            Abiotrophia
----
-56141:   A35E_RS01250  134287 secondary endosymbiont of Heteropsylla cubana              secondary
-56142: TREMTM_RS00245 1835721 secondary endosymbiont of Trabutina mannipara              secondary
-56143:  NL324_RS02350    2355           unidentified bacterial endosymbiont           unidentified
-56144:  NL324_RS03830    2355           unidentified bacterial endosymbiont           unidentified
-56145:  NL324_RS04090    2355           unidentified bacterial endosymbiont           unidentified
+               id   taxid               organism               genus
+           <char>  <char>                 <char>              <char>
+1: AB6B37_RS01935  570162    Fretibacter rubidus         Fretibacter
+2:  KK102_RS15670 2838947 Enterobacter quasimori        Enterobacter
+3:  KK102_RS22065 2838947 Enterobacter quasimori        Enterobacter
 }
