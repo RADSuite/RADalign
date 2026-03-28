@@ -13,8 +13,8 @@ list of organism names
 outputs all unique organisms in RADlib
 }
 \examples{
-> head(get_all_organisms())
-[1] ""                                                     " - All Species"
-[3] "'Nostoc - All Species"                                "'Nostoc azollae' 0708"
-[5] "[Acidovorax] - All Species"                           "[Acidovorax] ebreus TPSY"
+> get_all_organisms()
+[1] "Abditibacterium - All Species"            "Abditibacterium utsteinense"
+[3] "Abiotrophia - All Species"                "Abiotrophia defectiva"
+[5] "Absicoccus - All Species"                 "Absicoccus intestinalis"
 }
