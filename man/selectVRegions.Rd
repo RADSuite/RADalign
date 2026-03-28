@@ -22,6 +22,20 @@ After createRADq has been run, filters the csv file from
 createRADq to include only user-specificed variable regions.
 }
 \examples{
-selectVRegions(c("V1", "V5"))
-   X                species variable_region copy_num seq_id
+selectVRegions(c("V1","V5"))
+    X                     species variable_region    copy_id seq_id
+1   1 Pseudomonas aeruginosa PAO1              V1   PA0668.1    V11
+2   2 Pseudomonas aeruginosa PAO1              V1   PA4280.5    V11
+3   3 Pseudomonas aeruginosa PAO1              V1   PA4690.5    V11
+4   4 Pseudomonas aeruginosa PAO1              V1   PA5369.5    V11
+5   5          Brucella suis 1330              V1 BR_RS07585    V12
+6   6          Brucella suis 1330              V1 BR_RS08575    V12
+7   7          Brucella suis 1330              V1 BR_RS15325    V12
+29 29          Brucella suis 1330              V5 BR_RS07585    V51
+30 30          Brucella suis 1330              V5 BR_RS08575    V51
+31 31          Brucella suis 1330              V5 BR_RS15325    V51
+32 32 Pseudomonas aeruginosa PAO1              V5   PA4690.5    V52
+33 33 Pseudomonas aeruginosa PAO1              V5   PA5369.5    V52
+34 34 Pseudomonas aeruginosa PAO1              V5   PA0668.1    V53
+35 35 Pseudomonas aeruginosa PAO1              V5   PA4280.5    V53
 }
