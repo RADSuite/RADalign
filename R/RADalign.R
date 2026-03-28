@@ -35,7 +35,7 @@ createRADq <- function(species_list, return_dataframe = FALSE) {
 
 #' selectVRegions
 #'
-#' After createRADq has been run, filters the csv file from 
+#' After createRADq has been run, filters the csv file from
 #' createRADq to include only user-specificed variable regions.
 #'
 #' @param vregions a vector of variable regions to include in the
@@ -81,7 +81,7 @@ selectVRegions <- function(vregions, return_df = FALSE) {
 
 #' createSummarizedIDs
 #'
-#' After createRADq has been run, combines all unique IDs for each v-region in 
+#' After createRADq has been run, combines all unique IDs for each v-region in
 #' each species into a single ID
 #'
 #' @param return_df a boolean indicating whether a dataframe
@@ -104,12 +104,12 @@ createSummarizedIDs <- function(return_df = FALSE) {
     data <- read.csv(infile)
 
     data <- tibble::as_tibble(data)
-    vregion_data <- tidyr::pivot_wider(data, names_from = variable_region, values_from = seq_id) %>% 
-    dplyr::group_by(species) %>%
+    vregion_data <- tidyr::pivot_wider(data, names_from = variable_region, values_from = seq_id) |>
+    dplyr::group_by(species) |>
     dplyr::summarize(across(starts_with("V"), ~ {
         unique_ids <- unique(na.omit(.x))
         sorted <- sort(unique_ids)
-        str_flatten(sorted, collapse = "")
+        stringr::str_flatten(sorted, collapse = "")
     }))
 
     filepath <- file.path(data_dir, "RADq_summarized_IDs.csv")
@@ -147,9 +147,9 @@ createRADqGroups <- function(vregions, return_df = FALSE) {
     }
     data <- read.csv(infile)
 
-    ids <- tibble::as_tibble(data) %>%
-    dplyr::select(c(all_of(vregions))) %>%
-    tidyr::unite("final_id", everything(), sep = "") %>%
+    ids <- tibble::as_tibble(data) |>
+    dplyr::select(c(all_of(vregions))) |>
+    tidyr::unite("final_id", everything(), sep = "") |>
     dplyr::pull(final_id)
 
     groups <- split(seq_along(ids), ids)
@@ -169,7 +169,7 @@ createRADqGroups <- function(vregions, return_df = FALSE) {
         taxa = taxa,
         groups = group_ids
     )
-    
+
     filepath <- file.path(data_dir, "RADq_groups.csv")
     write.csv(taxa_groups, filepath)
 
@@ -215,7 +215,7 @@ getSequences <- function(taxa) {
 #' aligned sequences in each v-region
 #'
 #' @importFrom Biostrings DNAStringSet
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -256,7 +256,7 @@ alignVRegions <- function(sequences) {
 #' createSummary
 #'
 #' Takes the list of IDs created by alignVRegions and summarizes the
-#' data in a csv. Can also return the summary as a dataframe, if 
+#' data in a csv. Can also return the summary as a dataframe, if
 #' return_df is set to true.
 #'
 #' @param IDs a list containing unique IDs for each group of exactly
@@ -292,7 +292,7 @@ createSummary <- function(IDs, return_df = FALSE) {
         accessions_df <- get_accessions_df()
         for (j in seq_along(seq_list)) {
             capture_pattern = "^([^ ]+).*organism=\"([^\"]+)"
-            matches = str_match(seq_list[j], capture_pattern)
+            matches = stringr::str_match(seq_list[j], capture_pattern)
             copy_id <- matches[2]
             species <- matches[3]
 
