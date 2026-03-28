@@ -26,6 +26,7 @@ download_RAD_data <- function(pipeline, species_list, filter_list = c(), downloa
   #get accession ids for all species in species_list
   accessions_list <- get_accession_ids(species_list)
   # print(accessions_list)
+  print(accessions_list)
 
   #just temporary while acc ids are different
   # acc_list <- c("NZ_CTYB01000002.1",
