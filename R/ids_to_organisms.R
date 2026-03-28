@@ -26,11 +26,21 @@ get_accessions_df <- function() {
   headers <- index[["desc"]] # remember to change this code for download functions now that header has changed
 
   # get data from headers
-  labels <- stringi::stri_split_fixed(headers, "=", simplify = TRUE)
-  gene_id <- stringi::stri_split_fixed(labels[,1], " ", simplify = TRUE)[,1]
-  taxa_id <- stringi::stri_split_fixed(labels[,2], " ", simplify = TRUE)[,1]
-  organism_name <- stringi::stri_split_fixed(labels[,3], "\"", simplify = TRUE)[,2]
-  genus_name <- stringi::stri_split_fixed(organism_name, " ", simplify = TRUE)[,1]
+  # labels <- stringi::stri_split_fixed(headers, "=", simplify = TRUE)
+  # gene_id <- stringi::stri_split_fixed(labels[,1], " ", simplify = TRUE)[,1]
+  gene_id <- stringi::stri_match_all_regex(headers, "^\\w+") |>
+    unlist()
+  # taxa_id <- stringi::stri_split_fixed(labels[,2], " ", simplify = TRUE)[,1]
+  taxa_id <- stringi::stri_match_all_regex(headers, "taxid=(\\d+)") |>
+    lapply(function(x) x[[2]]) |>
+    unlist()
+  # organism_name <- stringi::stri_split_fixed(labels[,3], "\"", simplify = TRUE)[,2]
+  organism_name <- stringi::stri_match_all_regex(headers, "organism=\"(.*)\"") |>
+    lapply(function(x) x[[2]]) |>
+    unlist()
+  # genus_name <- stringi::stri_split_fixed(organism_name, " ", simplify = TRUE)[,1]
+  genus_name <- stringi::stri_match_first_regex(organism_name, "\\w+") |>
+    as.vector()
 
   #create empty accessions
   n <- length(headers)
@@ -45,7 +55,7 @@ get_accessions_df <- function() {
 
   #filter out empty (unnamed / node not leaf sequences) and bracketed (under review) organism names
   # setorder(accessions, organism)
-  accessions <- accessions[!is.na(organism) & organism != "" & stringi::stri_detect_regex(organism, "^[[:alnum:] ]+$")]
+  accessions <- accessions[!is.na(organism) & organism != ""]
 
   return (accessions)
 
