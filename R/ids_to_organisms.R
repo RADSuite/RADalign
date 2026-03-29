@@ -39,8 +39,8 @@ get_accessions_df <- function() {
     lapply(function(x) x[[2]]) |>
     unlist()
   # genus_name <- stringi::stri_split_fixed(organism_name, " ", simplify = TRUE)[,1]
-  genus_name <- stringi::stri_match_first_regex(organism_name, "\\w+") |>
-    as.vector()
+  genus_name <- stringi::stri_match_first_regex(organism_name, "(?!\\W)(\\w+)") |>
+    (function(x) x[,2])() # Selects the first word that's part of an organisms name ignoring leading non-word characters
 
   #create empty accessions
   n <- length(headers)
