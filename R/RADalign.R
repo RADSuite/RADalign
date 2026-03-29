@@ -292,19 +292,18 @@ alignVRegions <- function(sequences) {
 #' 62 Pseudomonas aeruginosa PAO1              V9   PA4690.5    V92
 #' 63 Pseudomonas aeruginosa PAO1              V9   PA5369.5    V92
 createSummary <- function(IDs, return_df = FALSE) {
-    print("in createSummary")
     # use vectors to retrieve and sort individual pieces of information from ID list
     species_vec <- character()
     region_vec <- character()
     copy_id_vec <- character()
     seq_id_vec <- character()
+
     for (i in seq_along(IDs)) {
         group <- IDs[i]
         id <- names(group)
         region <- substr(id, start = 1, stop = 2)
 
         seq_list <- IDs[[i]]
-        accessions_df <- get_accessions_df()
         for (j in seq_along(seq_list)) {
             capture_pattern = "^([^ ]+).*organism=\"([^\"]+)"
             matches = stringr::str_match(seq_list[j], capture_pattern)
@@ -334,7 +333,7 @@ createSummary <- function(IDs, return_df = FALSE) {
 # note: remember to always comment out scratch code you're using for tests
 # so the package will load correctly!
 
-# df <- createRADq(c("Pseudomonas aeruginosa", "Brucella suis"), TRUE)
+df <- createRADq(c("Pseudomonas aeruginosa", "Brucella suis"), TRUE)
 # createSummarizedIDs(TRUE)
 # createRADqGroups(c("V4","V5"), TRUE)
 
