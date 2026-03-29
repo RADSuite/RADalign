@@ -1,5 +1,3 @@
-# accessions_loaded <- FALSE
-
 #' get_accessions_df
 #'
 #' This function generates a callable df with two columns: species_name and accession_id
@@ -12,16 +10,19 @@
 #'
 #' @examples
 #' get_accessions_df()
-#' > species_name accession_id
+#'                id   taxid               organism               genus
+#'            <char>  <char>                 <char>              <char>
+#' 1: AB6B37_RS01935  570162    Fretibacter rubidus         Fretibacter
+#' 2:  KK102_RS15670 2838947 Enterobacter quasimori        Enterobacter
+#' 3:  KK102_RS22065 2838947 Enterobacter quasimori        Enterobacter
 
 get_accessions_df <- function() {
   #get path to RADlib
   file_path <- system.file("extdata", "RADlib16S.fa", package = "RADalign")
   lines <- readLines(file_path)
 
-  #get
+  #get all headers from RADlib
   index <- Biostrings::fasta.index(file_path, seqtype = "DNA")
-  # print(index[desc])
   headers <- index[["desc"]] # remember to change this code for download functions now that header has changed
 
   # get data from headers
@@ -33,33 +34,26 @@ get_accessions_df <- function() {
 
   #create empty accessions
   n <- length(headers)
-  accessions <- data.table(id = character(n), taxid = character(n), organism = character(n))
+  accessions <- data.table::data.table(id = character(n), taxid = character(n), organism = character(n), header = character(n))
 
   #fill accessions with memory pointers
   accessions[, id := gene_id]
   accessions[, taxid := taxa_id]
   accessions[, organism := organism_name]
   accessions[, genus := genus_name]
+  accessions[, header := headers]
 
-  # print(head(accessions, 40))
-  #
-  # #filter out empty (unamed / node not leaf sequences) and bracketed (under review) organism names
-  # first_correct_indx <- accessions[substr(organism_name, 1, 1) == "A", which = TRUE][1]
-  # accessions <- accessions[-(1:(first_correct_indx + 1)), ]
-  #
-  # print(head(accessions, 40))
-
-  # for (i in length(headers)) {
-  #   if (length()) {
-  #
-  #   }
-  # }
+  #filter out empty (unnamed / node not leaf sequences) and bracketed (under review) organism names
+  # setorder(accessions, organism)
+  accessions <- accessions[!is.na(organism) & organism != "" & stringi::stri_detect_regex(organism, "^[[:alnum:] ]+$")]
 
   return (accessions)
 
 }
 
-get_accessions_df()
+# get_accessions_df()
+# head(get_all_organisms(), 50)
+# tail(get_all_organisms(), 50)
 
 #' get_species_list
 #'
@@ -85,9 +79,14 @@ get_species_list <- function(ids) {
 
   accessions <- get_accessions_df()
   # organisms <- accessions[id %in% ids, organism]
-  organisms <- accessions[.(ids), on = .(id), organism]
+  # organisms <- accessions[.(ids), on = .(id), organism]
 
-  return (organisms)
+  # return (organisms)
+
+  organisms <- accessions[.(ids), on = .(id), .(organism, id)]
+  # print(organisms[is.na(organism)]$id)
+
+  return (organisms[!is.na(organism)]$organism)
 }
 
 #' get_accession_ids
@@ -110,10 +109,14 @@ get_species_list <- function(ids) {
 get_accession_ids <- function(organisms) {
 
   accessions <- get_accessions_df()
-  # organisms <- accessions[organism %in% organisms, id]
-  organisms <- accessions[.(organisms), on = .(organism), id]
+  # ids <- accessions[organism %in% organisms, id]
+  # print(ids)
+  # ids <- accessions[.(organisms), on = .(organism), id]
+  # return (ids)
+  ids <- accessions[.(organisms), on = .(organism), .(organism, id)]
+  print(ids[is.na(id)]$organism)
 
-  return (organisms)
+  return (ids[!is.na(id)]$id)
 }
 
 # id_list <- c("AB6B37_RS01935", "THECO_RS17145", "FW767_RS11870")
@@ -136,10 +139,10 @@ get_accession_ids <- function(organisms) {
 #' @export
 #'
 #' @examples
-#' > head(get_all_organisms())
-#' [1] ""                                                     " - All Species"
-#' [3] "'Nostoc - All Species"                                "'Nostoc azollae' 0708"
-#' [5] "[Acidovorax] - All Species"                           "[Acidovorax] ebreus TPSY"
+#' > get_all_organisms()
+#' [1] "Abditibacterium - All Species"            "Abditibacterium utsteinense"
+#' [3] "Abiotrophia - All Species"                "Abiotrophia defectiva"
+#' [5] "Absicoccus - All Species"                 "Absicoccus intestinalis"
 
 get_all_organisms <- function() {
   accessions <- get_accessions_df()
@@ -151,6 +154,34 @@ get_all_organisms <- function() {
 
   return(full_list)
 }
+
+#' get_species_from_genus
+#'
+#' outputs all organisms in RADlib of a given genus
+#'
+#' @return list of organism names
+#'
+#' @export
+#'
+#' @examples
+#' > get_species_from_genus("Segatella - All Species")
+#' [1] "Segatella hominis"             "Segatella oris"                "Segatella copri DSM 18205"     "Segatella baroniae DSM 16972 "
+#' [5] "Segatella cerevisiae"          "Segatella maculosa OT 289"     "Segatella bryantii"            "Segatella asaccharophila"
+#' [9] "Segatella intestinalis"        "Segatella oulorum F0390"       "Segatella salivae F0493"       "Segatella sinensis"
+
+get_species_from_genus <- function(genus_label) {
+  accessions <- get_accessions_df()
+
+  #get genus name from input string
+  genus_name <- stringi::stri_split_fixed(genus_label, " - ", simplify = TRUE)[,1]
+
+  #return all organisms with matching genus
+  species <- unique(accessions[genus %in% genus_name]$organism)
+
+  return (unique(species))
+}
+
+# get_species_from_genus("Segatella - All Species")
 
 # get_genus_to_species <- function() {
 #   accessions <- get_accessions_df()

@@ -14,5 +14,9 @@ This function generates a callable df with two columns: species_name and accessi
 }
 \examples{
 get_accessions_df()
-> species_name accession_id
+               id   taxid               organism               genus
+           <char>  <char>                 <char>              <char>
+1: AB6B37_RS01935  570162    Fretibacter rubidus         Fretibacter
+2:  KK102_RS15670 2838947 Enterobacter quasimori        Enterobacter
+3:  KK102_RS22065 2838947 Enterobacter quasimori        Enterobacter
 }
