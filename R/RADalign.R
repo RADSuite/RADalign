@@ -236,14 +236,28 @@ alignVRegions <- function(sequences) {
     all_v_regions <- c("V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9")
 
     for (region in all_v_regions) {
-        # get all sequences for region and perform msa
+        # get all sequences for region and and delete any empty sequences
         region_sequences <- getVRegions(sequences, region)
-        alignment <- msa::msa(region_sequences, method = "ClustalOmega")
+        clean_dna <- region_sequences[width(region_sequences) > 0]
+        if (length(clean_dna) != length(region_sequences)) {
+            print(paste0("Warning: empty sequences deleted in region ", region))
+        }
+
+        # skip performing msa if only one sequence exists
+        region_IDs <- list()
+        if (length(clean_dna) < 2) {
+            ID <- paste0(region, "1")
+            region_IDs[ID] <- names(clean_dna)
+            IDs <- c(IDs, region_IDs)
+            next
+        }
+
+        # perform msa
+        alignment <- msa::msa(clean_dna, method = "ClustalOmega")
 
         # separate out groups of identical sequences
         alignment <- as(alignment, "DNAStringSet")
         groups <- split(seq_along(alignment), as.character(alignment))
-        region_IDs <- list()
         for (i in seq_along(groups)) {
             ID <- paste0(region, i)
             region_IDs[ID] <- lapply(groups[i], function(i) names(alignment)[i])
@@ -278,6 +292,7 @@ alignVRegions <- function(sequences) {
 #' 62 Pseudomonas aeruginosa PAO1              V9   PA4690.5    V92
 #' 63 Pseudomonas aeruginosa PAO1              V9   PA5369.5    V92
 createSummary <- function(IDs, return_df = FALSE) {
+    print("in createSummary")
     # use vectors to retrieve and sort individual pieces of information from ID list
     species_vec <- character()
     region_vec <- character()
