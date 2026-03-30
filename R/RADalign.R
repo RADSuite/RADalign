@@ -238,7 +238,7 @@ alignVRegions <- function(sequences) {
     for (region in all_v_regions) {
         # get all sequences for region and and delete any empty sequences
         region_sequences <- getVRegions(sequences, region)
-        clean_dna <- region_sequences[width(region_sequences) > 0]
+        clean_dna <- region_sequences[Biostrings::width(region_sequences) > 0]
         if (length(clean_dna) != length(region_sequences)) {
             print(paste0("Warning: empty sequences deleted in region ", region))
         }
@@ -333,7 +333,7 @@ createSummary <- function(IDs, return_df = FALSE) {
 # note: remember to always comment out scratch code you're using for tests
 # so the package will load correctly!
 
-df <- createRADq(c("Pseudomonas aeruginosa", "Brucella suis"), TRUE)
+# df <- createRADq(c("Pseudomonas aeruginosa", "Brucella suis"), TRUE)
 # createSummarizedIDs(TRUE)
 # createRADqGroups(c("V4","V5"), TRUE)
 
