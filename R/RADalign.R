@@ -161,6 +161,7 @@ createRADqGroups <- function(vregions, return_df = FALSE) {
             group <- groups[[group_id]]
             if (i %in% group) {
                 group_ids <- group_id
+                break
             }
         }
     }
