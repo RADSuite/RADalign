@@ -2,27 +2,39 @@ library("MetaScope")
 
 # "/Users/myeshagilliland/BYU/BIO465/RADdownloads/metascope_test_ref"
 
+my_species_list <- c("Prevotella jejuni", "Faecalibacterium langellae","Prevotella intermedia ATCC 25611",
+                  "Porphyromonas gingivalis ATCC 33277",
+                  "Eggerthia catenaformis OT 569", "Capnocytophaga ochracea DSM 7271",
+                  "Corynebacterium matruchotii ATCC 14266", "Leptotrichia wadei")
+
+my_filter_list <- c("Segatella oris", "Veillonella hominis")
+
 # full RADlib
-# ref <- system.file("extdata", "RADlib16S.fa", package = "RADalign")
-rad_lib_file <- system.file("extdata", "RADlib16S.fa", package = "RADalign")
-dir.create("refdata")
-file.copy(rad_lib_file, "refdata")
-ref <- "refdata"
+# rad_lib_file <- system.file("extdata", "RADlib16S.fa", package = "RADalign")
+# dir.create("refdata")
+# file.copy(rad_lib_file, "refdata")
+# ref <- "refdata"
 
 # partial RADlib for speed (only aligns against your selected species)
 # ref <- "your/RADdownload/file/path/here"
 # ref <- "/Users/myeshagilliland/Downloads/RADdownloads_28032026_141154_Qmja11sK/MetaScope_reference_dir"
+ref <- download_data("MetaScope", my_species_list)
 
 # data <- "/Users/myeshagilliland/BYU/BIO465/RADdownloads/metascope_rad_test/D1_16dnajoin.fastq" # Example sample data (sourced from https://doi.org/10.5061/dryad.d41v4)
 # data <- "path/to/your/file/data_file.fastq"
-data <- "D1_16dnajoin.fastq"
+# data <- "D1_16dnajoin.fastq"
+data <- "/Users/myeshagilliland/BYU/BIO465/RADdownloads/metascope_rad_test/D1_16dnajoin.fastq"
 
-dir.create("indices")
+# indices <- tempfile()
+indices <- "indices"
+dir.create(indices)
+# dir.create("indices")
 dir.create("out")
 
 # FILTER
 # filter <- "/Users/myeshagilliland/Downloads/RADdownloads_28032026_141154_Qmja11sK/MetaScope_filter_dir"
-# dir.create("filterindices)
+filter <- download_data("MetaScope", my_filter_list, filter = TRUE)
+# dir.create("filterindices")
 
 # ---- This portion starts at 5 of the MetaScope tutorial ----
 # Starting at part 5 of the "tutorial"Introduction to MetaScope" vignette
@@ -37,11 +49,16 @@ dir.create("out")
 
 # ---- Target indecies (these are the taxa we want to identify) ----
 # This should be the export of Jake's explorer? a filtered RADlib
+# mk_bowtie_index(
+#   ref_dir = ref,
+#   lib_dir = "indices",
+#   lib_name = "target",
+#   overwrite = T)
 mk_bowtie_index(
   ref_dir = ref,
-  lib_dir = "indices",
+  lib_dir = indices,
   lib_name = "target",
-  overwrite = T)
+  overwrite = TRUE)
 
 # ---- Filter indecies (These are the taxa we don't want to id) ----
 # Another filtered RADlib the researchers don't think they'll find?
@@ -55,18 +72,30 @@ mk_bowtie_index(
 
 # FILTER
 # mk_bowtie_index(
-#   ref_dir = filterdata,
+#   ref_dir = filter,
 #   lib_dir = "filterindices",
 #   lib_name = "filter",
 #   overwrite = T)
+mk_bowtie_index(
+  ref_dir = filter,
+  lib_dir = indices,
+  lib_name = "filter",
+  overwrite = TRUE)
 
+# target_map <- align_target_bowtie(
+#   data,
+#   lib_dir = "indices",
+#   libs = "target",
+#   align_dir = "out",
+#   align_file = "bowtie_target",
+#   overwrite = TRUE)
 target_map <- align_target_bowtie(
   data,
-  lib_dir = "indices",
+  lib_dir = indices,
   libs = "target",
   align_dir = "out",
   align_file = "bowtie_target",
-  overwrite = T)
+  overwrite = TRUE)
 
 # ---- I have not tested this part ----
 # final_map <-
@@ -81,15 +110,15 @@ target_map <- align_target_bowtie(
 #     threads = 1
 #   )
 
-# final_map <-
-#   filter_host_bowtie(
-#     reads_bam = target_map,
-#     lib_dir = index_temp, #this is the line that needs to be checked
-#     libs = "filter",
-#     make_bam = TRUE,
-#     overwrite = TRUE,
-#     threads = 1
-#   )
+final_map <-
+  filter_host_bowtie(
+    reads_bam = target_map,
+    lib_dir = indices,
+    libs = "filter",
+    make_bam = TRUE,
+    overwrite = TRUE,
+    threads = 1
+  )
 
 # ---- End untested ----
 
