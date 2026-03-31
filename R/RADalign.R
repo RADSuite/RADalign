@@ -160,7 +160,7 @@ createRADqGroups <- function(vregions, return_df = FALSE) {
         for (group_id in names(groups)) {
             group <- groups[[group_id]]
             if (i %in% group) {
-                group_ids <- c(group_ids, group_id)
+                group_ids <- group_id
             }
         }
     }
