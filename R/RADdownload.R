@@ -207,7 +207,7 @@ download_MetaScope_reference <- function(accessions_list, download_folder, filte
     seq_file_path <- file.path(folder_path, seq_file_name)
 
     #use Biostrings to write fasta file for sequence, and save name
-    writeXStringSet(sequences[i], seq_file_path)
+    Biostrings::writeXStringSet(sequences[i], seq_file_path)
     file_names[[i]] <- seq_file_name
   }
 

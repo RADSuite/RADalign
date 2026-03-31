@@ -7,14 +7,14 @@
 download_RAD_data(
   pipeline,
   species_list,
-  filter_list = c(),
+  filter = FALSE,
   download_location = fs::path_home("Downloads")
 )
 }
 \arguments{
-\item{pipeline}{name of pipeline. Valid inputs: ("MetaScope", "Kraken")}
+\item{pipeline}{name of pipeline. Valid inputs: ("MetaScope")}
 
-\item{species_list}{list of species names to download from RADlib.}
+\item{species_list}{list of organism names to download from RADlib.}
 
 \item{download_location}{optional parameter, file path for where downloaded files should go, defaults to working directory}
 }
@@ -26,7 +26,5 @@ This function allows users to download files for integration with analysis pipel
 }
 \examples{
 download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
-> Files downloaded successfully to /Users/user/Downloads/RADdownloads_05032026_204428_QVrV4idv :
-Metascope_reference_db.fasta
-Metascope_accessions_db.sqlite
+"Users/user/Downloads/RADdownloads_05032026_204428_QVrV4idv/MetaScope_reference_dir"
 }
