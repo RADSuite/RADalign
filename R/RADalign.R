@@ -160,7 +160,8 @@ createRADqGroups <- function(vregions, return_df = FALSE) {
         for (group_id in names(groups)) {
             group <- groups[[group_id]]
             if (i %in% group) {
-                group_ids <- c(group_ids, group_id)
+                group_ids[i] <- group_id
+                break
             }
         }
     }
@@ -236,14 +237,28 @@ alignVRegions <- function(sequences) {
     all_v_regions <- c("V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9")
 
     for (region in all_v_regions) {
-        # get all sequences for region and perform msa
+        # get all sequences for region and and delete any empty sequences
         region_sequences <- getVRegions(sequences, region)
-        alignment <- msa::msa(region_sequences, method = "ClustalOmega")
+        clean_dna <- region_sequences[Biostrings::width(region_sequences) > 0]
+        if (length(clean_dna) != length(region_sequences)) {
+            print(paste0("Warning: empty sequences deleted in region ", region))
+        }
+
+        # skip performing msa if only one sequence exists
+        region_IDs <- list()
+        if (length(clean_dna) < 2) {
+            ID <- paste0(region, "1")
+            region_IDs[ID] <- names(clean_dna)
+            IDs <- c(IDs, region_IDs)
+            next
+        }
+
+        # perform msa
+        alignment <- msa::msa(clean_dna, method = "ClustalOmega")
 
         # separate out groups of identical sequences
         alignment <- as(alignment, "DNAStringSet")
         groups <- split(seq_along(alignment), as.character(alignment))
-        region_IDs <- list()
         for (i in seq_along(groups)) {
             ID <- paste0(region, i)
             region_IDs[ID] <- lapply(groups[i], function(i) names(alignment)[i])
@@ -283,13 +298,13 @@ createSummary <- function(IDs, return_df = FALSE) {
     region_vec <- character()
     copy_id_vec <- character()
     seq_id_vec <- character()
+
     for (i in seq_along(IDs)) {
         group <- IDs[i]
         id <- names(group)
         region <- substr(id, start = 1, stop = 2)
 
         seq_list <- IDs[[i]]
-        accessions_df <- get_accessions_df()
         for (j in seq_along(seq_list)) {
             capture_pattern = "^([^ ]+).*organism=\"([^\"]+)"
             matches = stringr::str_match(seq_list[j], capture_pattern)

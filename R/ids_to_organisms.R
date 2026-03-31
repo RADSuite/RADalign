@@ -158,7 +158,13 @@ get_all_organisms <- function() {
   accessions <- get_accessions_df()
   organism_list <- unique(accessions$organism)
   genus_list <- unique(accessions$genus)
-  genus_labels <- paste0(genus_list, " - All Species")
+
+  genus_counts <- accessions |>
+    dplyr::distinct(genus, organism) |>
+    dplyr::count(genus, name = "n")
+
+  # genus_labels <- paste0(genus_list, " - All Species")
+  genus_labels <- paste0(genus_counts$genus, " - All Species (", genus_counts$n, ")")
 
   full_list <- stringi::stri_sort(append(genus_labels, organism_list))
 
