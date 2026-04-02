@@ -61,10 +61,6 @@ get_accessions_df <- function() {
 
 }
 
-# get_accessions_df()
-# head(get_all_organisms(), 50)
-# tail(get_all_organisms(), 50)
-
 #' get_species_list
 #'
 #' Given a list of accession ids, outputs species list (with duplicates)
@@ -129,17 +125,6 @@ get_accession_ids <- function(organisms) {
   return (ids[!is.na(id)]$id)
 }
 
-# id_list <- c("AB6B37_RS01935", "THECO_RS17145", "FW767_RS11870")
-# org_list <- c("Fretibacter rubidus", "Thermobacillus composti KWC4", "Heminiphilus faecis")
-#
-# print(get_species_list(id_list))
-# print(get_accession_ids(org_list))
-
-# AB6B37_RS01935 taxid=570162 organism="Fretibacter rubidus"
-# THECO_RS17145 taxid=717605 organism="Thermobacillus composti KWC4"
-# FW767_RS11870 taxid=2601703 organism="Heminiphilus faecis"
-
-
 #' get_all_organisms
 #'
 #' outputs all unique organisms in RADlib
@@ -196,20 +181,3 @@ get_species_from_genus <- function(genus_label) {
 
   return (unique(species))
 }
-
-# get_species_from_genus("Segatella - All Species")
-
-# get_genus_to_species <- function() {
-#   accessions <- get_accessions_df()
-#   genus_list <- unique(accessions$genus)
-#
-#   # accessions[genus_name %in% genus, organism]
-#
-#   genus_organism_df <- data.table(genus_name = genus_list)
-#   genus_organism_df[, organism_names := lapply(genus_name, accessions[genus_name %in% genus, organism])]
-#
-#   return(genus_organism_df)
-# }
-
-# print(head(get_all_organisms()))
-

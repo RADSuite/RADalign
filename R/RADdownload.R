@@ -26,9 +26,6 @@ download_RAD_data <- function(pipeline, organisms_list, filter = FALSE, download
     dir.create(download_folder, recursive = TRUE)
   }
 
-  # #store names of all created files for output
-  # file_paths <- c()
-
   folder_path <- ""
 
   if (pipeline == "MetaScope") {
@@ -41,7 +38,7 @@ download_RAD_data <- function(pipeline, organisms_list, filter = FALSE, download
     } else if (filter == TRUE) {
       #get accession ids for all organisms in organisms_list
       accessions_list <- get_accession_ids(organisms_list)
-      #generate reference sequence files & save folder name
+      #generate filter sequence files & save folder name
       filter_folder <- download_MetaScope_reference(accessions_list, download_folder, TRUE)
       folder_path <- file.path(download_folder, filter_folder$folder)
     }
@@ -85,7 +82,7 @@ download_MetaScope_reference <- function(accessions_list, download_folder, filte
   #get file path to RADlib
   RADlib_path <- system.file("extdata", "RADlib16S.fa", package = "RADalign")
 
-  #use RADlib readSequences function to return selected sequences from RADlib
+  #use RADlibHandler readSequences function to return selected sequences from RADlib
   sequences <- readSequences(RADlib_path, accessions_list)
 
   file_names <- vector("list", length(sequences))
@@ -95,7 +92,7 @@ download_MetaScope_reference <- function(accessions_list, download_folder, filte
     seq_file_name <- paste0(organisms_name, "_", id, ".fasta")
     seq_file_path <- file.path(folder_path, seq_file_name)
 
-    #use Biostrings to write fasta file for sequence, and save name
+    #write fasta file for sequence, and save name
     Biostrings::writeXStringSet(sequences[i], seq_file_path)
     file_names[[i]] <- seq_file_name
   }
