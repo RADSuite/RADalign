@@ -1,17 +1,17 @@
 #' download_RAD_data
 #'
-#' This function allows users to download files for integration with analysis pipelines, currently supports MetaScope and Kraken.
+#' This function downloads files for integration with analysis pipelines, currently supports MetaScope.
 #'
-#' @param pipeline name of pipeline. Valid inputs: ("MetaScope")
-#' @param organisms_list list of organism names to download from RADlib.
-#' @param download_location optional parameter, file path for where downloaded files should go, defaults to working directory
+#' @param pipeline <char> name of pipeline, valid inputs: "MetaScope"
+#' @param organisms_list <char list> of organism names to download from RADlib
+#' @param download_location <char> (optional) file path to desired download location, defaults to "Downloads" folder
 #'
-#' @return This function downloads a zipped folder to the user's working directory, and outputs the location of the downloaded folder.
+#' @return <char> path to downloaded folder of files
 #'
 #' @export
 #'
 #' @examples
-#' download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
+#' > download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
 #' "Users/user/Downloads/RADdownloads_05032026_204428_QVrV4idv/MetaScope_reference_dir"
 
 download_RAD_data <- function(pipeline, organisms_list, filter = FALSE, download_location = fs::path_home("Downloads")) {
@@ -26,43 +26,55 @@ download_RAD_data <- function(pipeline, organisms_list, filter = FALSE, download
     dir.create(download_folder, recursive = TRUE)
   }
 
-  folder_path <- ""
-
+  #download necessary files for selected pipeline
   if (pipeline == "MetaScope") {
     if (filter == FALSE) {
+
       #get accession ids for all organisms in organisms_list
       accessions_list <- get_accession_ids(organisms_list)
       #generate reference sequence files & save folder name
       reference_folder <- download_MetaScope_reference(accessions_list, download_folder)
-      folder_path <- file.path(download_folder, reference_folder$folder)
+
+      return(file.path(download_folder, reference_folder$folder))
+
     } else if (filter == TRUE) {
+
       #get accession ids for all organisms in organisms_list
       accessions_list <- get_accession_ids(organisms_list)
       #generate filter sequence files & save folder name
       filter_folder <- download_MetaScope_reference(accessions_list, download_folder, TRUE)
-      folder_path <- file.path(download_folder, filter_folder$folder)
+
+      return(file.path(download_folder, filter_folder$folder))
     }
   } else {
     cat(paste0(pipeline, " integration currently unsupported"))
+    return("")
   }
-
-  return (folder_path)
 }
 
 #' download_MetaScope_reference
 #'
-#' This function filters RADlib by accession ids and downloads a reference database to the provided folder
+#' This function downloads selected sequences from RADlib to a desired folder as fasta files and places them inside a single sub folder.
 #'
-#' @param accessions_list list of string accession ids of sequences to download from RADlib.
-#' @param download_folder character path to desired destination folder
+#' @param accessions_list <list> of string accession ids of sequences to download from RADlib
+#' @param download_folder <char> path to desired destination folder (sub folder will be created)
+#' @param filter <boolean> (optional) for filter/reference sequence download, defaults to FALSE
 #'
-#' @return This function downloads a filtered portion of RADlib (fasta) and outputs the file name.
+#' @return <list> with <char> $folder containing the sub folder name and <char list> $files containing a list of downloaded fasta file names
 #'
 #' @export
 #'
 #' @examples
-#' download_MetaScope_reference(c("NZ_CTYB01000002.1","NZ_CTYB01000003.1"), /Users/user/Downloads/RAD_downloads_folder)
-#' > "Metascope_reference_db.fasta"
+#' > download_MetaScope_reference(c("EDX97_RS10020", "EDX97_RS11935", "MOZ64_RS11590"), "/Users/user/Downloads")
+#' $folder
+#' [1] "MetaScope_reference_dir"
+#' $files
+#' $files[[1]]
+#' [1] "Absicoccus_porci_EDX97_RS10020.fasta"
+#' $files[[2]]
+#' [1] "Absicoccus_porci_EDX97_RS11935.fasta"
+#' $files[[3]]
+#' [1] "Absicoccus_intestinalis_MOZ64_RS11590.fasta"
 
 download_MetaScope_reference <- function(accessions_list, download_folder, filter = FALSE) {
 
@@ -85,9 +97,12 @@ download_MetaScope_reference <- function(accessions_list, download_folder, filte
   #return selected sequences from RADlib
   sequences <- readSequences(RADlib_path, accessions_list)
 
+  #download one fasta file per sequence
   file_names <- vector("list", length(sequences))
   for (i in seq_along(sequences)) {
     id <- accessions_list[i]
+
+    #generate file name
     organisms_name <- paste(unlist(strsplit(organisms_list[i], " ")), collapse = "_")
     seq_file_name <- paste0(organisms_name, "_", id, ".fasta")
     seq_file_path <- file.path(folder_path, seq_file_name)
