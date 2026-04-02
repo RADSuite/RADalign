@@ -1,8 +1,8 @@
 #' get_accessions_df
 #'
-#' This function generates a callable df with two columns: species_name and accession_id
+#' This function generates a metadata table from the header data of RADlib.
 #'
-#' @return This function returns a callable df with two columns: species_name and accession_id
+#' @return A data.frame object, with <char> type columns id, taxid, organism, and genus.
 #'
 #' @import data.table
 #'
@@ -44,7 +44,10 @@ get_accessions_df <- function() {
 
   #create empty accessions
   n <- length(headers)
-  accessions <- data.table::data.table(id = character(n), taxid = character(n), organism = character(n), header = character(n))
+  accessions <- data.table::data.table(id = character(n),
+                                       taxid = character(n),
+                                       organism = character(n),
+                                       header = character(n))
 
   #fill accessions with memory pointers
   accessions[, id := gene_id]
@@ -53,8 +56,7 @@ get_accessions_df <- function() {
   accessions[, genus := genus_name]
   accessions[, header := headers]
 
-  #filter out empty (unnamed / node not leaf sequences) and bracketed (under review) organism names
-  # setorder(accessions, organism)
+  #filter out unnamed RADlib entries
   accessions <- accessions[!is.na(organism) & organism != ""]
 
   return (accessions)
@@ -63,18 +65,20 @@ get_accessions_df <- function() {
 
 #' get_species_list
 #'
-#' Given a list of accession ids, outputs species list (with duplicates)
+#' Given a list of accession ids, outputs organisms list (includes duplicates)
 #'
 #' @param accession_ids list of valid accession ids
 #'
-#' @return list of species (with duplicates)
+#' @return list of organisms (includes duplicates)
 #'
 #' @export
 #'
 #' @examples
-#' get_accession_ids(c("Pseudomonas aeruginosa", "Brucella suis"))
-#' [1] "GCF_000006765.1.1" "GCF_000006765.1.2" "GCF_000006765.1.3" "GCF_000006765.1.4"
-#' [5] "GCF_000007505.1.1" "GCF_000007505.1.2" "GCF_000007505.1.3"
+#' get_species_list(c("EDX97_RS04345", "EDX97_RS05225", "EDX97_RS06840",
+#' "EDX97_RS09045", "EDX97_RS10020", "EDX97_RS11935", "MOZ64_RS11590"))
+#' [1] "Absicoccus porci"        "Absicoccus porci"        "Absicoccus porci"
+#' [4] "Absicoccus porci"       "Absicoccus porci"        "Absicoccus porci"
+#' [7] "Absicoccus intestinalis"
 
 get_species_list <- function(ids) {
 
@@ -97,20 +101,19 @@ get_species_list <- function(ids) {
 
 #' get_accession_ids
 #'
-#' Given a list of species, outputs accession ids
+#' Given a list of organisms, outputs accession ids
 #'
-#' @param species_list list of valid species names
+#' @param organisms list of valid organism names
 #'
 #' @return list of accession ids (with copy numbers)
 #'
 #' @export
 #'
 #' @examples
-#' get_accession_ids(c("GCF_000006765.1.1", "GCF_000006765.1.2",
-#' "GCF_000006765.1.3", "GCF_000006765.1.4", "GCF_000007505.1.1",
+#' get_accession_ids(c("Absicoccus porci", "Absicoccus intestinalis"))
 #' "GCF_000007505.1.2", "GCF_000007505.1.3"))
-#' [1] "Pseudomonas aeruginosa" "Pseudomonas aeruginosa" "Pseudomonas aeruginosa" "Pseudomonas aeruginosa"
-#' [5] "Brucella suis"          "Brucella suis"          "Brucella suis"
+#' [1] "EDX97_RS04345" "EDX97_RS05225" "EDX97_RS06840" "EDX97_RS09045"
+#' [5] "EDX97_RS10020" "EDX97_RS11935" "MOZ64_RS11590"
 
 get_accession_ids <- function(organisms) {
 
@@ -135,9 +138,8 @@ get_accession_ids <- function(organisms) {
 #'
 #' @examples
 #' > get_all_organisms()
-#' [1] "Abditibacterium - All Species"            "Abditibacterium utsteinense"
-#' [3] "Abiotrophia - All Species"                "Abiotrophia defectiva"
-#' [5] "Absicoccus - All Species"                 "Absicoccus intestinalis"
+#' [1] "Abditibacterium - All Species (1)" "Abditibacterium utsteinense"       "Abiotrophia - All Species (1)"
+#' [4] "Abiotrophia defectiva"             "Absicoccus - All Species (2)"      "Absicoccus intestinalis"
 
 get_all_organisms <- function() {
   accessions <- get_accessions_df()
@@ -165,10 +167,8 @@ get_all_organisms <- function() {
 #' @export
 #'
 #' @examples
-#' > get_species_from_genus("Segatella - All Species")
-#' [1] "Segatella hominis"             "Segatella oris"                "Segatella copri DSM 18205"     "Segatella baroniae DSM 16972 "
-#' [5] "Segatella cerevisiae"          "Segatella maculosa OT 289"     "Segatella bryantii"            "Segatella asaccharophila"
-#' [9] "Segatella intestinalis"        "Segatella oulorum F0390"       "Segatella salivae F0493"       "Segatella sinensis"
+#' > get_species_from_genus("Absicoccus - All Species (2)")
+#' [1] "Absicoccus porci"        "Absicoccus intestinalis"
 
 get_species_from_genus <- function(genus_label) {
   accessions <- get_accessions_df()

@@ -82,7 +82,7 @@ download_MetaScope_reference <- function(accessions_list, download_folder, filte
   #get file path to RADlib
   RADlib_path <- system.file("extdata", "RADlib16S.fa", package = "RADalign")
 
-  #use RADlibHandler readSequences function to return selected sequences from RADlib
+  #return selected sequences from RADlib
   sequences <- readSequences(RADlib_path, accessions_list)
 
   file_names <- vector("list", length(sequences))
