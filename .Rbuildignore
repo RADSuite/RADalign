@@ -1,3 +1,4 @@
 ^RADalign\.Rproj$
 ^\.Rproj\.user$
 ^^R/figure_2_presentable\\.r$$
+^figure3_fastq_to_fasta\.r$
