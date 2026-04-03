@@ -1,57 +1,84 @@
-
 library(data.table)
+library(tidyverse)
+library(ggtext)
 
-get_fig_3_counts <- function() {
-  # needs to access actual files eventually
-  # but for now...
-  species_names <- c("sp_1", "sp_2", "sp_3")
-  BLAST_counts <- c(10, 15, 20)
-  RAD_counts <- c(11, 14, 21)
-  SILVA_counts <- c(8, 12, 15)
-  NCBI16s_counts <- c(9, 13, 12)
+# load in data
+get_fig_counts <- function() {
+  ncbi_counts  <- read_csv(system.file("extdata", "ncbi_counts_with_names.csv",  package = "RADalign"))
+  rad_counts   <- read_csv(system.file("extdata", "rad_counts_with_names.csv",   package = "RADalign"))
+  silva_counts <- read_csv(system.file("extdata", "silva_counts_with_names.csv", package = "RADalign"))
 
-  counts <- data.table::data.table(
-    species = species_names,
-    BLAST = BLAST_counts,
-    RAD = RAD_counts,
-    SILVA = SILVA_counts,
-    NCBI = NCBI16s_counts
-  )
 
-  return (counts)
+  ncbi_species  <- ncbi_counts  %>% filter(Freq > 0) %>% pull(organism_short) %>% unique()
+  rad_species   <- rad_counts   %>% filter(Freq > 0) %>% pull(organism_short) %>% unique()
+  silva_species <- silva_counts %>% filter(Freq > 0) %>% pull(organism_short) %>% unique()
+
+  common_species <- Reduce(intersect, list(ncbi_species, rad_species, silva_species))
+  common_species <- common_species[common_species != "Bacteroides caecimuris"]
+
+  combined <- bind_rows(
+    ncbi_counts  %>% mutate(database = "NCBI - MetaScope"),
+    rad_counts   %>% mutate(database = "RADlib - MetaScope"),
+    silva_counts %>% mutate(database = "SILVA - MetaScope")
+  ) %>%
+    filter(organism_short %in% common_species, Freq > 0) %>%
+    group_by(organism_short, database) %>%
+    summarise(Freq = sum(Freq), .groups = "drop")
+
+  return(combined)
 }
 
-calculate_proximity <- function(counts, column) {
-  return (1 - abs(counts$BLAST - column)/counts$BLAST)
+# temporary fake blast data
+add_blast_fake_data <- function(combined) {
+  blast_fake_data <- combined %>%
+    distinct(organism_short) %>%
+    mutate(database = "NCBI - BLAST", Freq = 0.1)
+
+  return(bind_rows(combined, blast_dummy))
 }
 
-get_proximity_table <- function(counts) {
-
-  RAD_proximities <- calculate_proximity(counts, counts$RAD)
-  SILVA_proximities <- calculate_proximity(counts, counts$SILVA)
-  NCBI_proximities <- calculate_proximity(counts, counts$NCBI)
-
-  proximities <- data.table::data.table(
-    species = counts$species,
-    RAD = RAD_proximities,
-    SILVA = SILVA_proximities,
-    NCBI = NCBI_proximities
-  )
-
-  return(proximities)
+# italics
+add_labels <- function(combined) {
+  combined %>%
+    mutate(label = paste0("<i>", word(organism_short, 1), " ", word(organism_short, 2), "</i>"))
 }
 
-generate_figure_3 <- function() {
+generate_figure <- function() {
+  combined <- get_fig_counts() %>%
+    add_blast_fake_data() %>%
+    add_labels()
 
-  # get proximities data
-  counts <- get_fig_3_counts()
-  proximities <- get_proximity_table(counts)
-
-  print(proximities)
-
-  # draw figure
-
-  return("Done")
+  ggplot(combined, aes(x = Freq, y = label, fill = database)) +
+    geom_col(position = position_dodge(0.9), alpha = 0.9,
+             color = "black", linewidth = 0.3) +
+    scale_fill_manual(
+      values = c(
+        "NCBI - BLAST"       = "#E8871A",
+        "NCBI - MetaScope"   = "#888780",
+        "SILVA - MetaScope"  = "#378ADD",
+        "RADlib - MetaScope" = "#1D9E75"
+      ),
+      breaks = c(
+        "NCBI - BLAST",
+        "NCBI - MetaScope",
+        "SILVA - MetaScope",
+        "RADlib - MetaScope"
+      )
+    ) +
+    labs(
+      x    = "Read count",
+      y    = NULL,
+      fill = "Database - Algorithm"
+    ) +
+    theme_bw(base_size = 15) +
+    theme(
+      panel.grid.major.y = element_blank(),
+      panel.grid.minor   = element_blank(),
+      panel.grid.major.x = element_line(color = "grey90"),
+      axis.text.y        = element_markdown(size = 15),
+      legend.position    = "right",
+      legend.key.size    = unit(0.8, "cm")
+    )
 }
 
-
+generate_figure()
