@@ -34,7 +34,7 @@ add_blast_fake_data <- function(combined) {
     distinct(organism_short) %>%
     mutate(database = "NCBI - BLAST", Freq = 0.1)
 
-  return(bind_rows(combined, blast_dummy))
+  return(bind_rows(combined, blast_fake_data))
 }
 
 # italics
