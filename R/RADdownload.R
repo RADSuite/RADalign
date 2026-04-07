@@ -17,6 +17,15 @@
 
 download_RAD_data <- function(pipeline, organisms_list, filter = FALSE, download_location = getwd(), ref_library = "RADlib") {
 
+  # verify download_location is valid
+  location_valid <- tryCatch({
+    normalizePath(download_location, mustWork = TRUE)
+    TRUE
+  }, error = function(e) FALSE)
+  if (!location_valid) {
+    return ("Invalid download location. Please double check the file path.")
+  }
+
   # generate unique folder name
   rand_string <- paste0(sample(c(letters, LETTERS, 0:9), 8, replace = TRUE), collapse = "")
   folder_name <- paste0("RADdownloads", format(Sys.time(), "_%d%m%Y_%H%M%S_"), rand_string)
