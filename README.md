@@ -1,6 +1,6 @@
 # RADalign
 
-An interactive RShiny app for exploring the variation across 16S rRNA gene copies in microbial taxa, helping researchers choose the right variable regions for their amplicon sequencing experiments.
+An R package designed to use the RAD library to explore the variation across 16S rRNA gene copies in microbial taxa by aligning 16S variable regions. Can be used as a backend for RADexplorer, an interactive RShiny app that explores RADalign outputs.
 
 ---
 
@@ -9,26 +9,26 @@ An interactive RShiny app for exploring the variation across 16S rRNA gene copie
 Bacterial species carry multiple copies of the 16S rRNA gene (~5 on average, up to 15+), and those copies are often not identical. 
 When planning an amplicon sequencing experiment, the variable region (v-region) you choose to sequence determines whether you can actually distinguish the species you care about from closely related taxa.
 
-RADx (**R**egional **A**lignment **D**atabase explorer) lets you select any set of species and immediately visualize how their 16S rRNA gene copies differ across all nine variable regions. 
-You can easily see which v-regions (V1-V9) produce unique sequences for your target taxa, which ones leave species indistinguishable from one another, and whether a single region is enough for your experimental needs.
+RADalign (**R**egional **A**lignment **D**atabase) utilizes the RADlib reference library to align the variable regions (v-regions) within the 16S rRNA gene. RADalign is designed to function with RADexplorer, an RShiny app that visualizes RADalign's output, but it also produces csv data files and optional dataframes that can be used by researchers to generate their own visualizations.
+
+Aligning v-regions allows researchers to see which v-regions (V1-V9) produce unique sequences for your target taxa, which ones leave species indistinguishable from one another, and whether a single region is enough for your experimental needs.
 
 This matters more than most researchers expect. The most commonly used v-regions in amplicon sequencing, V3 and V4, are frequently insufficient to differentiate between closely related organisms within the same genus or species group.
 
 ### How it works
 
-RADx is built on two reference libraries:
+RADalign is built on two reference libraries:
 
 - **RADlib16S** - A bacteria and archaea 16S rRNA database containing all copies of the 16S rRNA gene in an organism
 - **RADlibVR** - A database of all variable regions found in RADlib
 
-When you select species in RADx, **RADalign** runs multiple sequence alignment and grouping analyses on those sequences across whichever variable regions you choose. 
-RADx then visualizes the results so you can interpret them interactively.
+**RADalign** runs multiple sequence alignment and grouping analyses on all variable regions of selected sequences and returns a csv and optional dataframe containing information about which sequences aligned exactly. Further functions facilitate filtering of variable regions and the creation of IDs used by RADexplorer to identify groups of aligned sequences and species.
 
 ---
 
 ## Installation
 
-RADx is installed directly from GitHub. All dependencies are handled automatically.  
+RADalign is installed directly from GitHub. All dependencies are handled automatically.  
 Run the following commands in your R or RStudio console:
 
 **Step 1: Install pak** (if not already installed)
@@ -39,17 +39,6 @@ install.packages("pak")
 **Step 2: Install RADalign**
 ```r
 pak::pak("RADSuite/RADalign")
-```
-
-**Step 3: Install RADx**
-```r
-pak::pak("RADSuite/RADexplorer")
-```
-
-**Step 4: Load and launch**
-```r
-library(RADexplorer)
-RADexplorer::run_app()
 ```
 
 ---
