@@ -38,7 +38,7 @@ target_map <- align_target_bowtie(
   align_file = "bowtie_target",
   overwrite = TRUE)
 
-# 7. PREP BAM FILE
+# 7. GENERATE BAM FILE
 bamFile <- Rsamtools::BamFile(target_map)
 
 param <-
