@@ -96,7 +96,7 @@ Contains functions to download RADlib as a refrence database for pipeline integr
 
 - **download_MetaScope_reference()** : Downloads selected sequences from RADlib to a desired folder as fasta files and places them inside a single sub folder.
 
-### RADlibHandler
+### RADsequences
 
 Contains functions used to acquire data from RADlib.
 
