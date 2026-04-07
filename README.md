@@ -28,7 +28,7 @@ RADx then visualizes the results so you can interpret them interactively.
 
 ## Installation
 
-RADx is installed directly from GitHub. All dependencies are handled automatically.  
+RADalign is installed directly from GitHub. All dependencies are handled automatically.  
 Run the following commands in your R or RStudio console:
 
 **Step 1: Install pak** (if not already installed)
@@ -41,20 +41,9 @@ install.packages("pak")
 pak::pak("RADSuite/RADalign")
 ```
 
-**Step 3: Install RADx**
-```r
-pak::pak("RADSuite/RADexplorer")
-```
-
-**Step 4: Load and launch**
-```r
-library(RADexplorer)
-RADexplorer::run_app()
-```
-
 ---
 
-## How to Use
+## Functions by File
 
 ### 1. Select your species
 When the app opens you will see the RADx menu. Use the species picker to search for and select the taxa you want to analyze. You can select as many species as you need. Keep in mind, the more species you select, the longer it will take to load the explorer. To select all species within a genus, use the "All Species (#)" options. 
