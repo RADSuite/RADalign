@@ -95,7 +95,7 @@ download_RAD_data <- function(pipeline, organisms_list, filter = FALSE, download
 
 download_MetaScope_reference <- function(accessions_list, download_folder, filter = FALSE, ref_library = "RADlib") {
 
-  organisms_list <- get_organisms_list(accessions_list)
+  organisms_list <- get_organism_names(accessions_list)
 
   # get file path to RADlib
   if (ref_library == "RADlib") {

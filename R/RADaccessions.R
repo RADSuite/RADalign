@@ -58,7 +58,7 @@ get_accessions_df <- function() {
   return (accessions)
 }
 
-#' get_species_list
+#' get_organism_names
 #'
 #' Given a list of accession ids, outputs corresponding organism names (includes duplicates).
 #'
@@ -69,13 +69,13 @@ get_accessions_df <- function() {
 #' @export
 #'
 #' @examples
-#' > get_species_list(c("EDX97_RS04345", "EDX97_RS05225", "EDX97_RS06840",
+#' > get_organism_names(c("EDX97_RS04345", "EDX97_RS05225", "EDX97_RS06840",
 #' "EDX97_RS09045", "EDX97_RS10020", "EDX97_RS11935", "MOZ64_RS11590"))
 #' [1] "Absicoccus porci"        "Absicoccus porci"        "Absicoccus porci"
 #' [4] "Absicoccus porci"       "Absicoccus porci"        "Absicoccus porci"
 #' [7] "Absicoccus intestinalis"
 
-get_species_list <- function(acc_ids) {
+get_organism_names <- function(acc_ids) {
 
   accessions <- get_accessions_df()
 

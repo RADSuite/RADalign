@@ -60,7 +60,7 @@ Contains functions relating to RADlib header metadata (organism names, accession
 
 - **get_accessions_df()** : Generates a metadata table from the header data of RADlib.
 
-- **get_species_list()** : Given a list of accession ids, outputs corresponding organism names (includes duplicates).
+- **get_organism_names()** : Given a list of accession ids, outputs corresponding organism names (includes duplicates).
 
 - **get_taxa_ids()** : Given a list of accession ids, outputs corresponding taxa ids (includes duplicates).
 
