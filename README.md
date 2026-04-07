@@ -9,9 +9,9 @@ An R package designed to use the RAD library to explore the variation across 16S
 Bacterial species carry multiple copies of the 16S rRNA gene (~5 on average, up to 15+), and those copies are often not identical. 
 When planning an amplicon sequencing experiment, the variable region (v-region) you choose to sequence determines whether you can actually distinguish the species you care about from closely related taxa.
 
-RADalign (**R**egional **A**lignment **D**atabase) utilizes the RADlib reference library to align the variable regions (v-regions) within the 16S rRNA gene. RADalign is designed to function with RADexplorer, an RShiny app that visualizes RADalign's output, but it also produces csv data files and optional dataframes that can be used by researchers to generate their own visualizations.
+RADalign (**R**egional **A**lignment **D**atabase) utilizes the RADlib reference library to align the variable regions (v-regions) within the 16S rRNA gene. RADalign is designed to function with RADexplorer, an RShiny app that visualizes RADalign's output, but it also produces csv data files and optional dataframes that can be used to generate your own visualizations.
 
-Aligning v-regions allows researchers to see which v-regions (V1-V9) produce unique sequences for your target taxa, which ones leave species indistinguishable from one another, and whether a single region is enough for your experimental needs.
+Aligning v-regions allows you to see which v-regions (V1-V9) produce unique sequences for a group of target taxa, which ones leave species indistinguishable from one another, and whether a single region is enough for your experimental needs.
 
 This matters more than most researchers expect. The most commonly used v-regions in amplicon sequencing, V3 and V4, are frequently insufficient to differentiate between closely related organisms within the same genus or species group.
 
