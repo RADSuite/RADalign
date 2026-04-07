@@ -15,7 +15,7 @@
 #' > download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
 #' "Users/user/Downloads/RADdownloads_05032026_204428_QVrV4idv/MetaScope_reference_dir"
 
-download_RAD_data <- function(pipeline, organisms_list, filter = FALSE, download_location = fs::path_home("Downloads")) {
+download_RAD_data <- function(pipeline, organisms_list, filter = FALSE, download_location = getwd(), ref_library = "RADlib") {
 
   # generate unique folder name
   rand_string <- paste0(sample(c(letters, LETTERS, 0:9), 8, replace = TRUE), collapse = "")
@@ -84,15 +84,19 @@ download_RAD_data <- function(pipeline, organisms_list, filter = FALSE, download
 #' $files[[3]]
 #' [1] "Absicoccus_intestinalis_MOZ64_RS11590.fasta"
 
-download_MetaScope_reference <- function(accessions_list, download_folder, filter = FALSE) {
+download_MetaScope_reference <- function(accessions_list, download_folder, filter = FALSE, ref_library = "RADlib") {
 
   organisms_list <- get_organisms_list(accessions_list)
 
   # get file path to RADlib
-  RADlib_path <- system.file("extdata", "RADlib16S.fa", package = "RADalign")
+  if (ref_library == "RADlib") {
+    lib_path <- system.file("extdata", "RADlib16S.fa", package = "RADalign")
+  } else {
+    lib_path <- ref_library
+  }
 
   # return selected sequences from RADlib
-  sequences <- readSequences(RADlib_path, accessions_list)
+  sequences <- readSequences(lib_path, accessions_list)
 
   # determine sub folder name
   if (!filter) {

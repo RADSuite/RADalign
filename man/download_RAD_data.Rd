@@ -6,25 +6,27 @@
 \usage{
 download_RAD_data(
   pipeline,
-  species_list,
+  organisms_list,
   filter = FALSE,
   download_location = fs::path_home("Downloads")
 )
 }
 \arguments{
-\item{pipeline}{name of pipeline. Valid inputs: ("MetaScope")}
+\item{pipeline}{\if{html}{\out{<char>}} name of pipeline, valid inputs: "MetaScope"}
 
-\item{species_list}{list of organism names to download from RADlib.}
+\item{organisms_list}{\if{html}{\out{<char list>}} of organism names to download from RADlib}
 
-\item{download_location}{optional parameter, file path for where downloaded files should go, defaults to working directory}
+\item{filter}{\if{html}{\out{<boolean>}} (optional) for filter/reference sequence download, defaults to FALSE}
+
+\item{download_location}{\if{html}{\out{<char>}} (optional) file path to desired download location, defaults to "Downloads" folder}
 }
 \value{
-This function downloads a zipped folder to the user's working directory, and outputs the location of the downloaded folder.
+\if{html}{\out{<char>}} path to downloaded folder of files
 }
 \description{
-This function allows users to download files for integration with analysis pipelines, currently supports MetaScope and Kraken.
+This function downloads files for integration with analysis pipelines, currently supports MetaScope.
 }
 \examples{
-download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
+> download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))
 "Users/user/Downloads/RADdownloads_05032026_204428_QVrV4idv/MetaScope_reference_dir"
 }
