@@ -60,7 +60,7 @@ get_accessions_df <- function() {
 
 #' get_species_list
 #'
-#' Given a list of accession ids, outputs corresponding organism names (includes duplicates)
+#' Given a list of accession ids, outputs corresponding organism names (includes duplicates).
 #'
 #' @param acc_ids <char list> list of valid accession ids
 #'
@@ -87,7 +87,7 @@ get_species_list <- function(acc_ids) {
 
 #' get_taxa_ids
 #'
-#' Given a list of accession ids, outputs corresponding taxa ids (includes duplicates)
+#' Given a list of accession ids, outputs corresponding taxa ids (includes duplicates).
 #'
 #' @param acc_ids <char list> list of valid accession ids
 #'
@@ -112,7 +112,7 @@ get_taxa_ids <- function(acc_ids) {
 
 #' get_accession_ids
 #'
-#' Given a list of organism names, outputs all corresponding accession ids
+#' Given a list of organism names, outputs all corresponding accession ids.
 #'
 #' @param organisms <char list> list of valid organism names
 #'
@@ -172,7 +172,7 @@ get_all_organisms <- function() {
 
 #' get_species_from_genus
 #'
-#' Finds all organisms in RADlib of a given genus
+#' Finds all organisms in RADlib of a given genus.
 #'
 #' @param genus_label <char> genus label with format "Genus - All Species (#)"
 #'

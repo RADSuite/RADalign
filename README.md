@@ -43,107 +43,91 @@ pak::pak("RADSuite/RADalign")
 
 ---
 
-## Functions by File
+## Available Functions
 
-### 1. Select your species
-When the app opens you will see the RADx menu. Use the species picker to search for and select the taxa you want to analyze. You can select as many species as you need. Keep in mind, the more species you select, the longer it will take to load the explorer. To select all species within a genus, use the "All Species (#)" options. 
+### RADaccessions
 
-<img width="1181" height="581" alt="taxaSelect" src="https://github.com/user-attachments/assets/53e91509-f637-492c-aa36-edc21868b5c1" />
+Contains functions relating to RADlib header metadata (organism names, accession ids, taxa ids, genus).
 
+#### get_accessions_df()
+Generates a metadata table from the header data of RADlib.
 
-### 2. Choose your variable regions
+#### get_species_list()
+Given a list of accession ids, outputs corresponding organism names (includes duplicates).
 
-After the explorer loads, you can then select the variable regions you want to explore in the sidebar. By default V4 is selected, since it is the most commonly sequenced region, but you can select any combination of V1 through V9.
+#### get_taxa_ids()
+Given a list of accession ids, outputs corresponding taxa ids (includes duplicates).
 
-<img width="276" height="264" alt="vregions" src="https://github.com/user-attachments/assets/dc0e2100-8efa-4961-b84c-6186c22e1921" />
+#### get_accession_ids()
+Given a list of organism names, outputs all corresponding accession ids.
 
+#### get_all_organisms()
+Generates a sorted list of all unique organisms in RADlib and adds genus labels ("Genus - All Species (#)").
 
-### 3. Interpret the visualization
+#### get_species_from_genus()
+Finds all organisms in RADlib of a given genus.
 
-The main plot shows each selected species on the y axis and the variable regions on the x axis. Each tile represents a 16S rRNA gene copy for that species in that region. Tile colors designate identical sequences within a v-region.
+### RADalign
 
-- **A gold highlight** on a column marks the currently selected variable regions
-- **A green checkmark** next to a species means it can be uniquely identified using the selected variable regions
-- **A red bracket** groups species that cannot be distinguished from one another with the selected regions
+!!! RACHEL
 
-<img width="1145" height="643" alt="RADx" src="https://github.com/user-attachments/assets/b2b3f0fd-9112-4fc0-87b8-de91f3ed0eaa" />
+#### createRADq()
+Given a list of species names, pull sequences for each species from RADlibV, align them, and return either a csv or csv and dataframe containing a summary of which variable regions aligned exactly, designated by a unique ID for each group.
 
+#### selectVRegions()
+After createRADq has been run, filters the csv file from createRADq to include only user-specificed variable regions.
 
-### 4. Detailed view
+#### createSummarizedIDs()
+After createRADq has been run, combines all unique IDs for each v-region in each species into a single ID.
 
-Toggle **Detailed View** in the sidebar to switch from a summary view to a copy-level view, showing each individual gene copy as its own row per species. 
-In general, the summary view is best for interspecies comparison and V-region selection, while the detailed view is best for studying intraspecies copy variation within a taxon.
+#### createRADqGroups()
+After createSummarizedIDs has been run, combines all summarized IDs and sorts taxa into groups that share all the same IDs for the given variable regions.
 
-<img width="1101" height="604" alt="RADxDetailed" src="https://github.com/user-attachments/assets/ac385cc9-b62b-4aa3-acc4-2490e8c606f8" />
+#### getSequences()
+Given a list of species, retrieves all sequences associated with those taxa from RADlibV.
 
+#### alignVRegions()
+For a group of sequences in RADlib, align the sequences in each V-region individually.
 
-### 5. V-Region labels
+#### createSummary()
+Takes the list of IDs created by alignVRegions and summarizes the data in a csv. Can also return the summary as a dataframe, if return_df is set to true.
 
-Toggle **V-Region Labels** to display sequence ID labels directly on each tile for closer inspection and discernment between v-region sequences.
+### RADdownload
 
-<img width="1101" height="604" alt="vregionlabels" src="https://github.com/user-attachments/assets/d58334de-cd68-4a5a-92ea-77ae84f7d906" />
+DESCRIPTION
 
+#### download_RAD_data()
+Downloads files for integration with analysis pipelines, currently supports MetaScope.
 
-### 6. Locate taxa
+#### download_MetaScope_reference()
+Downloads selected sequences from RADlib to a desired folder as fasta files and places them inside a single sub folder.
 
-Use the **Locate Taxa** picker to search for specific taxa in the plot. Located taxa will be marked with a blue arrow on the y axis and the plot will be filtered to include only the taxa they are are grouped with under the current v-region selection.
+### RADlibHandler
 
-<img width="1136" height="460" alt="locateTaxa" src="https://github.com/user-attachments/assets/1d57ed6d-e862-49ff-8f83-97edec6fe4fd" />
+!!! RACHEL
 
+#### readSequences()
+Reads in all sequences that include the given accession ids in their header.
 
----
-
-## Typical Use Cases
-
-**1) "Can I distinguish two closely related species with V4 alone?"**  
-Select both species, check only V4, and see whether they fall into the same group (red bracket) or are identifiable (green checkmark).
-
-
-**2) "How many 16S copies does my target organism carry, and are they identical?"**  
-Switch to Detailed View to see every individual gene copy per species. Tiles of different colors in the same column indicate unique sequences for that region.
-
-
-**3) "My budget only allows for sequencing one variable region. Which should I choose?"**   
-Select your taxa and step through each V-region one at a time. The region that gives you the most green checkmarks across your taxa of interest is your best option.
-
-
-**4) "Another researcher used V3 amplicon sequencing. Can I compare my V4 data to theirs?"**  
-Select your taxa and check V3 and V4 separately. If the groupings and checkmarks change between the two selections, the two datasets are identifying your community differently and direct comparison may be difficult.
-
-
-**5) "I am writing a methods section and need to justify the variable region I chose to sequence."**  
-Select your taxa and check your chosen region. RADx shows you exactly why that region identifies your specific targets. Feel free to cite RADx as justification for your primer selection.
-
-
-**6) "I think two (or more) species in my data are collapsing into one OTU. Can I confirm that?"**  
-Select your species of interest and your sequenced region. A red bracket means they cannot be told apart by that amplicon and are therefore collapsing into one OTU.
-
-
----
-
-## RADport
-
-RADx includes **RADport**, a built-in guide that walks you through running your selected taxa through the MetaScope pipeline. Access it from the main menu after selecting your species.
+#### getVRegions()
+Given a DNAStringSet of sequences with V-regions included in their names, retrieves all instances of selected V-regions from the DNAStringSet.
 
 ---
 
 ## Dependencies
 
-RADx requires R >= 4.1. Core dependencies include:
+RADalign requires R >= 4.1. Core dependencies include:
 
-- `shiny`, `bslib`, `shinyjs`, `shinyWidgets`
-- `ggplot2`, `ggtext`, `plotly`
-- `dplyr`, `tidyr`, `tibble`, `stringr`
-- `Biostrings`, `msa`
-- `RADalign`
+- `Biostrings`, `dplyr`, `msa`, `tibble`, `tidyr`,
+  `data.table`, `stringi`, `tidyverse`
 
-All dependencies are installed automatically via `pak::pak("RADSuite/RADexplorer")`.
+All dependencies are installed automatically via `pak::pak("RADSuite/RADalign")`.
 
 ---
 
 ## Citation
 
-If you use RADx in your work, please cite the RADSuite package suite (citation tbd).
+If you use RADalign in your work, please cite the RADSuite package suite (citation tbd).
 
 ---
 

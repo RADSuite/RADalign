@@ -82,7 +82,7 @@ selectVRegions <- function(vregions, return_df = FALSE) {
 #' createSummarizedIDs
 #'
 #' After createRADq has been run, combines all unique IDs for each v-region in
-#' each species into a single ID
+#' each species into a single ID.
 #'
 #' @param return_df a boolean indicating whether a dataframe
 #' containing the data should be returned in addition to the
@@ -208,7 +208,7 @@ getSequences <- function(taxa) {
 #' alignVRegions
 #'
 #' For a group of sequences in RADlib, align the sequences in each
-#'  V-region individually
+#' V-region individually.
 #'
 #' @param sequences a DNAStringSet of sequences to align
 #'
