@@ -72,7 +72,7 @@ Contains functions relating to RADlib header metadata (organism names, accession
 
 ### RADalign
 
-!!! RACHEL
+Contains functions used to align sequences from RADlib and create outputs summarizing the alignments for the user or for RADexplorer.
 
 - **createRADq()** : Given a list of species names, pull sequences for each species from RADlibV, align them, and return either a csv or csv and dataframe containing a summary of which variable regions aligned exactly, designated by a unique ID for each group.
 
@@ -98,7 +98,7 @@ DESCRIPTION
 
 ### RADlibHandler
 
-!!! RACHEL
+Contains functions used to acquire data from RADlib.
 
 - **readSequences()** : Reads in all sequences that include the given accession ids in their header.
 
