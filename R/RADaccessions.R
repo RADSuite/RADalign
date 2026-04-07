@@ -62,7 +62,7 @@ get_accessions_df <- function() {
 #'
 #' Given a list of accession ids, outputs corresponding organism names (includes duplicates)
 #'
-#' @param accession_ids <char list> of valid accession ids
+#' @param acc_ids <char list> of valid accession ids
 #'
 #' @return <char list> of organism names (includes duplicates)
 #'
@@ -75,14 +75,39 @@ get_accessions_df <- function() {
 #' [4] "Absicoccus porci"       "Absicoccus porci"        "Absicoccus porci"
 #' [7] "Absicoccus intestinalis"
 
-get_species_list <- function(ids) {
+get_species_list <- function(acc_ids) {
 
   accessions <- get_accessions_df()
 
   # filter accessions by ids
-  organisms <- accessions[.(ids), on = .(id), .(organism, id)]
+  organisms <- accessions[.(acc_ids), on = .(id), .(organism, id)]
 
   return (organisms[!is.na(organism)]$organism)
+}
+
+#' get_taxa_ids
+#'
+#' Given a list of accession ids, outputs corresponding taxa ids (includes duplicates)
+#'
+#' @param acc_ids <char list> of valid accession ids
+#'
+#' @return <char list> of taxa ids (includes duplicates)
+#'
+#' @export
+#'
+#' @examples
+#' > get_taxa_ids(c("EDX97_RS04345", "EDX97_RS05225", "EDX97_RS06840",
+#' "EDX97_RS09045", "EDX97_RS10020", "EDX97_RS11935", "MOZ64_RS11590"))
+#' [1] "2486576" "2486576" "2486576" "2486576" "2486576" "2486576" "2926319"
+
+get_taxa_ids <- function(acc_ids) {
+
+  accessions <- get_accessions_df()
+
+  # filter accessions by ids
+  taxa_ids <- accessions[.(acc_ids), on = .(id), .(taxid, id)]
+
+  return (taxa_ids[!is.na(taxid)]$taxid)
 }
 
 #' get_accession_ids
