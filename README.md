@@ -19,8 +19,8 @@ This matters more than most researchers expect. The most commonly used v-regions
 
 RADalign is built on two reference libraries:
 
-- **RADlib16S** - A bacteria and archaea 16S rRNA database containing all copies of the 16S rRNA gene in an organism
-- **RADlibVR** - A database of all variable regions found in RADlib
+- **RADlib16S** : A bacteria and archaea 16S rRNA database containing all copies of the 16S rRNA gene in an organism
+- **RADlibVR** : A database of all variable regions found in RADlib
 
 **RADalign** runs multiple sequence alignment and grouping analyses on all variable regions of selected sequences and returns a csv and optional dataframe containing information about which sequences aligned exactly. Further functions facilitate filtering of variable regions and the creation of IDs used by RADexplorer to identify groups of aligned sequences and species.
 
@@ -51,72 +51,57 @@ pak::pak("RADSuite/RADalign")
 
 ## Available Functions
 
+For more details, view roxygen documentation using the command ?function or help(function).
+
 ### RADaccessions
 
 Contains functions relating to RADlib header metadata (organism names, accession ids, taxa ids, genus).
 
-#### get_accessions_df()
-Generates a metadata table from the header data of RADlib.
+- **get_accessions_df()** : Generates a metadata table from the header data of RADlib.
 
-#### get_species_list()
-Given a list of accession ids, outputs corresponding organism names (includes duplicates).
+- **get_species_list()** : Given a list of accession ids, outputs corresponding organism names (includes duplicates).
 
-#### get_taxa_ids()
-Given a list of accession ids, outputs corresponding taxa ids (includes duplicates).
+- **get_taxa_ids()** : Given a list of accession ids, outputs corresponding taxa ids (includes duplicates).
 
-#### get_accession_ids()
-Given a list of organism names, outputs all corresponding accession ids.
+- **get_accession_ids()** : Given a list of organism names, outputs all corresponding accession ids.
 
-#### get_all_organisms()
-Generates a sorted list of all unique organisms in RADlib and adds genus labels ("Genus - All Species (#)").
+- **get_all_organisms()** : Generates a sorted list of all unique organisms in RADlib and adds genus labels ("Genus - All Species (#)").
 
-#### get_species_from_genus()
-Finds all organisms in RADlib of a given genus.
+- **get_species_from_genus()** : Finds all organisms in RADlib of a given genus.
 
 ### RADalign
 
 !!! RACHEL
 
-#### createRADq()
-Given a list of species names, pull sequences for each species from RADlibV, align them, and return either a csv or csv and dataframe containing a summary of which variable regions aligned exactly, designated by a unique ID for each group.
+- **createRADq()** : Given a list of species names, pull sequences for each species from RADlibV, align them, and return either a csv or csv and dataframe containing a summary of which variable regions aligned exactly, designated by a unique ID for each group.
 
-#### selectVRegions()
-After createRADq has been run, filters the csv file from createRADq to include only user-specificed variable regions.
+- **selectVRegions()** : After createRADq has been run, filters the csv file from createRADq to include only user-specificed variable regions.
 
-#### createSummarizedIDs()
-After createRADq has been run, combines all unique IDs for each v-region in each species into a single ID.
+- **createSummarizedIDs()** : After createRADq has been run, combines all unique IDs for each v-region in each species into a single ID.
 
-#### createRADqGroups()
-After createSummarizedIDs has been run, combines all summarized IDs and sorts taxa into groups that share all the same IDs for the given variable regions.
+- **createRADqGroups()** : After createSummarizedIDs has been run, combines all summarized IDs and sorts taxa into groups that share all the same IDs for the given variable regions.
 
-#### getSequences()
-Given a list of species, retrieves all sequences associated with those taxa from RADlibV.
+- **getSequences()** : Given a list of species, retrieves all sequences associated with those taxa from RADlibV.
 
-#### alignVRegions()
-For a group of sequences in RADlib, align the sequences in each V-region individually.
+- **alignVRegions()** : For a group of sequences in RADlib, align the sequences in each V-region individually.
 
-#### createSummary()
-Takes the list of IDs created by alignVRegions and summarizes the data in a csv. Can also return the summary as a dataframe, if return_df is set to true.
+- **createSummary()** : Takes the list of IDs created by alignVRegions and summarizes the data in a csv. Can also return the summary as a dataframe, if return_df is set to true.
 
 ### RADdownload
 
 DESCRIPTION
 
-#### download_RAD_data()
-Downloads files for integration with analysis pipelines, currently supports MetaScope.
+- **download_RAD_data()** : Downloads files for integration with analysis pipelines, currently supports MetaScope.
 
-#### download_MetaScope_reference()
-Downloads selected sequences from RADlib to a desired folder as fasta files and places them inside a single sub folder.
+- **download_MetaScope_reference()** : Downloads selected sequences from RADlib to a desired folder as fasta files and places them inside a single sub folder.
 
 ### RADlibHandler
 
 !!! RACHEL
 
-#### readSequences()
-Reads in all sequences that include the given accession ids in their header.
+- **readSequences()** : Reads in all sequences that include the given accession ids in their header.
 
-#### getVRegions()
-Given a DNAStringSet of sequences with V-regions included in their names, retrieves all instances of selected V-regions from the DNAStringSet.
+- **getVRegions()** : Given a DNAStringSet of sequences with V-regions included in their names, retrieves all instances of selected V-regions from the DNAStringSet.
 
 ---
 
