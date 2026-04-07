@@ -40,7 +40,7 @@ install.packages("pak")
 ```r
 install.packages("BiocManager")
 BiocManager::install("Biostrings")
-````
+```
 
 **Step 3: Install RADalign**
 ```r
