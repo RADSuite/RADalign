@@ -3,7 +3,7 @@
 #' This function downloads files for integration with analysis pipelines, currently supports MetaScope.
 #'
 #' @param pipeline <char> name of pipeline, valid inputs: "MetaScope"
-#' @param organisms_list <char list> of organism names to download from RADlib
+#' @param organisms_list <char list> list of organism names to download from RADlib
 #' @param filter <boolean> (optional) for filter/reference sequence download, defaults to FALSE
 #' @param download_location <char> (optional) file path to desired download location, defaults to "Downloads" folder
 #'
@@ -64,7 +64,7 @@ download_RAD_data <- function(pipeline, organisms_list, filter = FALSE, download
 #'
 #' This function downloads selected sequences from RADlib to a desired folder as fasta files and places them inside a single sub folder.
 #'
-#' @param accessions_list <char list> of accession ids of sequences to download from RADlib
+#' @param accessions_list <char list> list of accession ids of sequences to download from RADlib
 #' @param download_folder <char> path to desired destination folder (sub folder will be created)
 #' @param filter <boolean> (optional) for filter/reference sequence download, defaults to FALSE
 #'

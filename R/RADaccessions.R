@@ -62,9 +62,9 @@ get_accessions_df <- function() {
 #'
 #' Given a list of accession ids, outputs corresponding organism names (includes duplicates)
 #'
-#' @param acc_ids <char list> of valid accession ids
+#' @param acc_ids <char list> list of valid accession ids
 #'
-#' @return <char list> of organism names (includes duplicates)
+#' @return <char list> list of organism names (includes duplicates)
 #'
 #' @export
 #'
@@ -89,9 +89,9 @@ get_species_list <- function(acc_ids) {
 #'
 #' Given a list of accession ids, outputs corresponding taxa ids (includes duplicates)
 #'
-#' @param acc_ids <char list> of valid accession ids
+#' @param acc_ids <char list> list of valid accession ids
 #'
-#' @return <char list> of taxa ids (includes duplicates)
+#' @return <char list> list of taxa ids (includes duplicates)
 #'
 #' @export
 #'
@@ -114,9 +114,9 @@ get_taxa_ids <- function(acc_ids) {
 #'
 #' Given a list of organism names, outputs all corresponding accession ids
 #'
-#' @param organisms <char list> of valid organism names
+#' @param organisms <char list> list of valid organism names
 #'
-#' @return <char list> of accession ids
+#' @return <char list> list of accession ids
 #'
 #' @export
 #'
@@ -140,7 +140,7 @@ get_accession_ids <- function(organisms) {
 #'
 #' Generates a sorted list of all unique organisms in RADlib and adds genus labels ("Genus - All Species (#)").
 #'
-#' @return <char list> of organism names (and genus labels)
+#' @return <char list> list of organism names (and genus labels)
 #'
 #' @export
 #'
@@ -177,7 +177,7 @@ get_all_organisms <- function() {
 #'
 #' @param genus_label <char> genus label with format "Genus - All Species (#)"
 #'
-#' @return <char list> of organism names
+#' @return <char list> list of organism names
 #'
 #' @export
 #'
