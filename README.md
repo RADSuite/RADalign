@@ -90,7 +90,7 @@ Contains functions used to align sequences from RADlib and create outputs summar
 
 ### RADdownload
 
-DESCRIPTION
+Contains functions to download RADlib as a refrence database for pipeline integration.
 
 - **download_RAD_data()** : Downloads files for integration with analysis pipelines, currently supports MetaScope.
 
