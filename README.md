@@ -4,7 +4,7 @@ An R package designed to use the RAD library to explore the variation across 16S
 
 ---
 
-## What is RADx?
+## What is RADalign?
 
 Bacterial species carry multiple copies of the 16S rRNA gene (~5 on average, up to 15+), and those copies are often not identical. 
 When planning an amplicon sequencing experiment, the variable region (v-region) you choose to sequence determines whether you can actually distinguish the species you care about from closely related taxa.
