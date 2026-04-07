@@ -43,7 +43,7 @@ pak::pak("RADSuite/RADalign")
 
 ---
 
-## How to Use
+## Functions by File
 
 ### 1. Select your species
 When the app opens you will see the RADx menu. Use the species picker to search for and select the taxa you want to analyze. You can select as many species as you need. Keep in mind, the more species you select, the longer it will take to load the explorer. To select all species within a genus, use the "All Species (#)" options. 

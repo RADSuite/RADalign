@@ -122,7 +122,6 @@ get_taxa_ids <- function(acc_ids) {
 #'
 #' @examples
 #' > get_accession_ids(c("Absicoccus porci", "Absicoccus intestinalis"))
-#' "GCF_000007505.1.2", "GCF_000007505.1.3"))
 #' [1] "EDX97_RS04345" "EDX97_RS05225" "EDX97_RS06840" "EDX97_RS09045"
 #' [5] "EDX97_RS10020" "EDX97_RS11935" "MOZ64_RS11590"
 
