@@ -1,6 +1,6 @@
 #' readSequences
 #'
-#' This function reads in all sequences that include the given accession ids in their header.
+#' Reads in all sequences that include the given accession ids in their header.
 #'
 #' @param infile <char> file path to the desired library
 #' @param accessions <char list> list of accession ids
@@ -30,7 +30,7 @@ readSequences <- function(infile, accessions) {
 #' getVRegions
 #'
 #' Given a DNAStringSet of sequences with V-regions included in their names,
-#' retrieve all instances of selected V-regions from the DNAStringSet.
+#' retrieves all instances of selected V-regions from the DNAStringSet.
 #'
 #' @param sequences <Biostrings::DNAStringSet> set of sequences to search
 #' @param vregions <char list> list of desired v-regions

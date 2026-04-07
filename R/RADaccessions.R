@@ -1,6 +1,6 @@
 #' get_accessions_df
 #'
-#' This function generates a metadata table from the header data of RADlib.
+#' Generates a metadata table from the header data of RADlib.
 #'
 #' @return <data.frame> table with <char> columns: id, taxid, organism, and genus.
 #'
