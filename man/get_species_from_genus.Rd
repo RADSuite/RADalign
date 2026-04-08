@@ -10,10 +10,10 @@ get_species_from_genus(genus_label)
 \item{genus_label}{\if{html}{\out{<char>}} genus label with format "Genus - All Species (#)"}
 }
 \value{
-\if{html}{\out{<char list>}} of organism names
+\if{html}{\out{<char list>}} list of organism names
 }
 \description{
-Finds all organisms in RADlib of a given genus
+Finds all organisms in RADlib of a given genus.
 }
 \examples{
 > get_species_from_genus("Absicoccus - All Species (2)")

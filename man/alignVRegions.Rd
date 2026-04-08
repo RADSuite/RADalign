@@ -15,7 +15,7 @@ aligned sequences in each v-region
 }
 \description{
 For a group of sequences in RADlib, align the sequences in each
-V-region individually
+V-region individually.
 }
 \examples{
 alignVRegions(sequences)

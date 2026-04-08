@@ -10,7 +10,7 @@ get_accessions_df()
 <data.frame> table with \if{html}{\out{<char>}} columns: id, taxid, organism, and genus.
 }
 \description{
-This function generates a metadata table from the header data of RADlib.
+Generates a metadata table from the header data of RADlib.
 }
 \examples{
 > get_accessions_df()

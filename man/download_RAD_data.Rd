@@ -8,13 +8,14 @@ download_RAD_data(
   pipeline,
   organisms_list,
   filter = FALSE,
-  download_location = fs::path_home("Downloads")
+  download_location = getwd(),
+  ref_library = "RADlib"
 )
 }
 \arguments{
 \item{pipeline}{\if{html}{\out{<char>}} name of pipeline, valid inputs: "MetaScope"}
 
-\item{organisms_list}{\if{html}{\out{<char list>}} of organism names to download from RADlib}
+\item{organisms_list}{\if{html}{\out{<char list>}} list of organism names to download from RADlib}
 
 \item{filter}{\if{html}{\out{<boolean>}} (optional) for filter/reference sequence download, defaults to FALSE}
 
@@ -24,7 +25,7 @@ download_RAD_data(
 \if{html}{\out{<char>}} path to downloaded folder of files
 }
 \description{
-This function downloads files for integration with analysis pipelines, currently supports MetaScope.
+Downloads files for integration with analysis pipelines, currently supports MetaScope.
 }
 \examples{
 > download_RAD_data("MetaScope", c("Pseudomonas aeruginosa", "Brucella suis"))

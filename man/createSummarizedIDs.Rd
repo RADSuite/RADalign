@@ -16,7 +16,7 @@ a dataframe containing the summary data when return_dataframe = TRUE
 }
 \description{
 After createRADq has been run, combines all unique IDs for each v-region in
-each species into a single ID
+each species into a single ID.
 }
 \examples{
 createSummarizedIDs(TRUE)

@@ -4,10 +4,15 @@
 \alias{download_MetaScope_reference}
 \title{download_MetaScope_reference}
 \usage{
-download_MetaScope_reference(accessions_list, download_folder, filter = FALSE)
+download_MetaScope_reference(
+  accessions_list,
+  download_folder,
+  filter = FALSE,
+  ref_library = "RADlib"
+)
 }
 \arguments{
-\item{accessions_list}{\if{html}{\out{<char list>}} of accession ids of sequences to download from RADlib}
+\item{accessions_list}{\if{html}{\out{<char list>}} list of accession ids of sequences to download from RADlib}
 
 \item{download_folder}{\if{html}{\out{<char>}} path to desired destination folder (sub folder will be created)}
 
@@ -17,7 +22,7 @@ download_MetaScope_reference(accessions_list, download_folder, filter = FALSE)
 \if{html}{\out{<list>}} with \if{html}{\out{<char>}} $folder containing the sub folder name and \if{html}{\out{<char list>}} $files containing a list of downloaded fasta file names
 }
 \description{
-This function downloads selected sequences from RADlib to a desired folder as fasta files and places them inside a single sub folder.
+Downloads selected sequences from RADlib to a desired folder as fasta files and places them inside a single sub folder.
 }
 \examples{
 > download_MetaScope_reference(c("EDX97_RS10020", "EDX97_RS11935", "MOZ64_RS11590"), "/Users/user/Downloads")

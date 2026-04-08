@@ -7,7 +7,7 @@
 get_all_organisms()
 }
 \value{
-\if{html}{\out{<char list>}} of organism names (and genus labels)
+\if{html}{\out{<char list>}} list of organism names (and genus labels)
 }
 \description{
 Generates a sorted list of all unique organisms in RADlib and adds genus labels ("Genus - All Species (#)").
