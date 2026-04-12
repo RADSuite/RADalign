@@ -2,7 +2,7 @@
 
 Follow the steps below to integrate with the MetaScope pipeline. Copy each code block and run it in your R console.
 
-*For the full documentation of MetaScope, go to:* https://wejlab.github.io/metascope-docs/index.html.
+*For the full documentation of MetaScope, go to: https://wejlab.github.io/metascope-docs/index.html.*
 
 ## 1. Load MetaScope
 Load the MetaScope package before running anything else.
