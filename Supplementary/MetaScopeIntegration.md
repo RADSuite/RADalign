@@ -30,7 +30,7 @@ ref <- "refdata"
 
 If using without RADx, replace the last two parameters of this function with your inputs. The last parameter defaults to your working directory, so you can leave that parameter blank if you want it downloaded there.
 
-*Note: the names in the organisms list MUST match RADlib organism names EXACTLY. See the RADx main page for the list of all organisms in RADlib, or run RADalign::get_all_organisms().*
+*Note: the names in your organisms list MUST match RADlib organism names EXACTLY. See the RADx main page for the list of all organisms in RADlib, or run RADalign::get_all_organisms().*
 ```r
 ref <- RADalign::download_RAD_data("MetaScope", c("your", "organisms", "list"), ,"path/to/your/preferred/download/location")
 ```
